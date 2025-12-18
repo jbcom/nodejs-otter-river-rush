@@ -1,6 +1,7 @@
 import { useFrame } from '@react-three/fiber';
+import type { With } from 'miniplex';
 import { useGameStore } from '../hooks/useGameStore';
-import { queries, spawn, world } from './world';
+import { type Entity, queries, spawn, world } from './world';
 
 export function PowerUpSystem() {
   const { status } = useGameStore();
@@ -35,10 +36,10 @@ export function PowerUpSystem() {
     if (status !== 'playing') return;
 
     const [player] = queries.player.entities;
-    if (!player) return;
+    if (!player || !player.collider) return;
 
     for (const powerUp of queries.powerUps) {
-      if (checkAABB(player as any, powerUp as any)) {
+      if (powerUp.collider && checkAABB(player, powerUp)) {
         activatePowerUp(player, powerUp.powerUp!.type);
         world.addComponent(powerUp, 'collected', true);
 
@@ -55,25 +56,22 @@ export function PowerUpSystem() {
     const now = Date.now();
     const [player] = queries.player.entities;
 
-    if (
-      player &&
-      (player as any).powerUpEndTime &&
-      now > (player as any).powerUpEndTime
-    ) {
+    if (player && player.powerUpEndTime && now > player.powerUpEndTime) {
       // Deactivate power-up
-      delete (player as any).powerUpEndTime;
-      if ((player as any).powerUpType === 'ghost') {
+      player.powerUpEndTime = undefined;
+      if (player.powerUpType === 'ghost') {
         world.removeComponent(player, 'ghost');
       }
+      player.powerUpType = undefined;
     }
   });
 
   return null;
 }
 
-function checkAABB(a: any, b: any): boolean {
-  if (!a.collider || !b.collider) return false;
+type CollidableEntity = With<Entity, 'position' | 'collider'>;
 
+function checkAABB(a: CollidableEntity, b: CollidableEntity): boolean {
   const aBox = {
     minX: a.position.x - a.collider.width / 2,
     maxX: a.position.x + a.collider.width / 2,
@@ -96,29 +94,36 @@ function checkAABB(a: any, b: any): boolean {
   );
 }
 
-function activatePowerUp(player: any, type: string) {
-  const { activatePowerUp } = useGameStore.getState();
+function activatePowerUp(
+  player: With<Entity, 'player'>,
+  type: Entity['powerUp'] extends { type: infer T } ? T : string
+) {
+  const { activatePowerUp: storeActivatePowerUp } = useGameStore.getState();
 
   switch (type) {
-    case 'shield':
+    case 'shield': {
       world.addComponent(player, 'invincible', true);
-      (player as any).powerUpType = 'shield';
-      (player as any).powerUpEndTime = Date.now() + 5000;
+      player.powerUpType = 'shield';
+      player.powerUpEndTime = Date.now() + 5000;
       break;
-    case 'ghost':
+    }
+    case 'ghost': {
       world.addComponent(player, 'ghost', true);
-      (player as any).powerUpType = 'ghost';
-      (player as any).powerUpEndTime = Date.now() + 5000;
+      player.powerUpType = 'ghost';
+      player.powerUpEndTime = Date.now() + 5000;
       break;
-    case 'magnet':
+    }
+    case 'magnet': {
       // Magnet handled in spawner
-      (player as any).magnetActive = true;
-      (player as any).magnetEndTime = Date.now() + 8000;
+      player.magnetActive = true;
+      player.magnetEndTime = Date.now() + 8000;
       break;
-    case 'multiplier':
-      activatePowerUp('multiplier', 10000);
+    }
+    case 'multiplier': {
+      storeActivatePowerUp('multiplier', 10000);
       break;
-    case 'slow_motion':
+    }
+    case 'slow_motion': {
       // Slow down obstacles
       for (const entity of queries.moving) {
         if (entity.obstacle || entity.collectible) {
@@ -135,5 +140,6 @@ function activatePowerUp(player: any, type: string) {
         }
       }, 5000);
       break;
+    }
   }
 }

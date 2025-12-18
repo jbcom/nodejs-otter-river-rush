@@ -1,16 +1,23 @@
-import { type Entity, queries, world } from '../ecs/world';
+import { queries, spawn, world } from '../ecs/world';
 
 export const debugTools = {
   // Entity inspection
   logAllEntities() {
-    for (const _entity of world) {
-    }
+    console.log('All entities:', world.entities);
   },
 
-  logEntityCounts() {},
+  logEntityCounts() {
+    console.log('Entity counts:', {
+      total: world.entities.length,
+      obstacles: queries.obstacles.entities.length,
+      collectibles: queries.collectibles.entities.length,
+      particles: queries.particles.entities.length,
+    });
+  },
 
   logPlayer() {
-    const [_player] = queries.player.entities;
+    const [player] = queries.player.entities;
+    console.log('Player:', player);
   },
 
   clearAllEntities() {
@@ -18,7 +25,6 @@ export const debugTools = {
   },
 
   spawnTestEntities() {
-    const { spawn } = require('../ecs/world');
     spawn.otter(0);
     spawn.rock(-2, 5, 0);
     spawn.rock(0, 8, 1);
@@ -109,5 +115,5 @@ export const debugTools = {
 
 // Expose to window for console access
 if (typeof window !== 'undefined') {
-  (window as any).debug = debugTools;
+  window.debug = debugTools;
 }

@@ -38,7 +38,7 @@ import('./hooks/useGameStore').then(({ useGameStore }) => {
 
 // Load debug tools
 import('./utils/debug-tools').then(({ debugTools }) => {
-  (window as any).debug = debugTools;
+  window.debug = debugTools;
 });
 
 // Preload audio

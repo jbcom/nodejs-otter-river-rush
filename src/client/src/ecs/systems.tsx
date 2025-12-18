@@ -81,7 +81,7 @@ export function CollisionSystem() {
 
     // Check obstacle collisions
     for (const obstacle of obstacleEntities) {
-      if (checkCollision(player as any, obstacle)) {
+      if (player.collider && checkCollision(player, obstacle)) {
         handleObstacleHit(player, obstacle);
       }
     }
@@ -89,17 +89,14 @@ export function CollisionSystem() {
     // Check enemy collisions
     const enemies = queries.enemies || [];
     for (const enemy of enemies) {
-      if (enemy.collider && checkCollision(player as any, enemy as any)) {
+      if (player.collider && enemy.collider && checkCollision(player, enemy)) {
         handleEnemyHit(player, enemy);
       }
     }
 
     // Check collectible collisions
     for (const collectible of collectibleEntities) {
-      if (
-        collectible.collider &&
-        checkCollision(player as any, collectible as any)
-      ) {
+      if (player.collider && collectible.collider && checkCollision(player, collectible)) {
         handleCollect(player, collectible);
       }
     }
@@ -358,8 +355,8 @@ export function GameSystems() {
 
 // Add camera shake on collision
 function triggerCameraShake(intensity: number = 0.2) {
-  if ((window as any).__cameraShake) {
-    (window as any).__cameraShake(intensity);
+  if (window.__cameraShake) {
+    window.__cameraShake(intensity);
   }
 }
 

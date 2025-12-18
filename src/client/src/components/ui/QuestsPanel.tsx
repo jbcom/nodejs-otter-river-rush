@@ -27,8 +27,8 @@ export function QuestsPanel({
   const [quests, setQuests] = useState<Quest[]>([]);
 
   useEffect(() => {
-    if (isOpen && (window as any).quests) {
-      const activeQuests = (window as any).quests.getActive();
+    if (isOpen && window.quests) {
+      const activeQuests = window.quests.getActive();
       setQuests(activeQuests || []);
     }
   }, [isOpen]);

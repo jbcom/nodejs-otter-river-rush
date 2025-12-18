@@ -37,7 +37,9 @@ export function useAnimationMixer(
     const loadAnimations = async () => {
       for (const [name, url] of Object.entries(animationUrls)) {
         try {
-          const { animations: clips } = (await useGLTF.preload(url)) as any;
+          const result = await useGLTF.preload(url);
+          const clips = (result as { animations?: THREE.AnimationClip[] })
+            ?.animations;
           if (clips && clips.length > 0 && mixerRef.current) {
             const action = mixerRef.current.clipAction(clips[0]);
             actionsRef.current.set(name, action);

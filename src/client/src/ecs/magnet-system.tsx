@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber';
 import { useGameStore } from '../hooks/useGameStore';
-import { queries, world } from './world';
+import { queries } from './world';
 
 export function MagnetSystem() {
   const { status } = useGameStore();
@@ -9,7 +9,7 @@ export function MagnetSystem() {
     if (status !== 'playing') return;
 
     const [player] = queries.player.entities;
-    if (!player || !(player as any).magnetActive) return;
+    if (!player || !player.magnetActive) return;
 
     const magnetRadius = 3;
     const pullSpeed = 8;
@@ -32,9 +32,9 @@ export function MagnetSystem() {
 
     // Deactivate if expired
     const now = Date.now();
-    if ((player as any).magnetEndTime && now > (player as any).magnetEndTime) {
-      (player as any).magnetActive = false;
-      delete (player as any).magnetEndTime;
+    if (player.magnetEndTime && now > player.magnetEndTime) {
+      player.magnetActive = false;
+      player.magnetEndTime = undefined;
     }
   });
 

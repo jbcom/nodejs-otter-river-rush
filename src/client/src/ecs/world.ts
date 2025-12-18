@@ -76,6 +76,15 @@ export type Entity = {
   collected?: true;
   destroyed?: true;
 
+  // Power-up tracking
+  powerUpType?: 'shield' | 'ghost' | 'magnet' | 'multiplier' | 'slow_motion';
+  powerUpEndTime?: number;
+  magnetActive?: boolean;
+  magnetEndTime?: number;
+
+  // Near-miss tracking
+  nearMissRecorded?: boolean;
+
   // Visual effects
   particle?: {
     color: string;

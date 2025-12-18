@@ -105,12 +105,14 @@ export function checkRayAABBIntersection(
   return t1 >= t0 && t1 >= 0;
 }
 
-export interface SpatialGrid {
+export interface SpatialGrid<T = Entity> {
   cellSize: number;
-  cells: Map<string, Set<any>>;
+  cells: Map<string, Set<T>>;
 }
 
-export function createSpatialGrid(cellSize: number = 2): SpatialGrid {
+export function createSpatialGrid<T = Entity>(
+  cellSize: number = 2
+): SpatialGrid<T> {
   return {
     cellSize,
     cells: new Map(),
@@ -123,9 +125,9 @@ export function getCellKey(x: number, y: number, cellSize: number): string {
   return `${cellX},${cellY}`;
 }
 
-export function insertIntoGrid(
-  grid: SpatialGrid,
-  entity: any,
+export function insertIntoGrid<T>(
+  grid: SpatialGrid<T>,
+  entity: T,
   x: number,
   y: number
 ) {
@@ -136,12 +138,12 @@ export function insertIntoGrid(
   grid.cells.get(key)!.add(entity);
 }
 
-export function getNearbyEntities(
-  grid: SpatialGrid,
+export function getNearbyEntities<T>(
+  grid: SpatialGrid<T>,
   x: number,
   y: number
-): Set<any> {
-  const nearby = new Set<any>();
+): Set<T> {
+  const nearby = new Set<T>();
   const cellX = Math.floor(x / grid.cellSize);
   const cellY = Math.floor(y / grid.cellSize);
 
@@ -159,6 +161,6 @@ export function getNearbyEntities(
   return nearby;
 }
 
-export function clearGrid(grid: SpatialGrid) {
+export function clearGrid<T>(grid: SpatialGrid<T>) {
   grid.cells.clear();
 }

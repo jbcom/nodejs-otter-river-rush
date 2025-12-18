@@ -152,7 +152,7 @@ export function QuestSystem(): null {
 
   // Expose quest data via window for UI access
   useEffect(() => {
-    (window as any).quests = {
+    window.quests = {
       getActive: () => questsRef.current,
       getProgress: () => progressRef.current,
       recordNearMiss: () => {
@@ -170,7 +170,7 @@ export function QuestSystem(): null {
     };
 
     return () => {
-      delete (window as any).quests;
+      window.quests = undefined;
     };
   }, []);
 
