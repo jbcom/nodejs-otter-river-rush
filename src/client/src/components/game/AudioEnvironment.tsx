@@ -1,6 +1,18 @@
 /**
  * Audio Environment using @jbcom/strata
  * Provides ambient audio, positional sounds, and weather audio
+ *
+ * REQUIRED AUDIO ASSETS:
+ * This component expects the following audio files to exist in the public directory:
+ * - /public/audio/ambient/forest.ogg
+ * - /public/audio/ambient/mountain.ogg
+ * - /public/audio/ambient/desert.ogg
+ * - /public/audio/ambient/waterfall.ogg
+ * - /public/audio/sfx/rain-loop.ogg
+ * - /public/audio/sfx/wind-loop.ogg
+ * - /public/audio/sfx/thunder.ogg
+ *
+ * See issue #11 for asset creation status.
  */
 
 import {

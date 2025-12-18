@@ -94,7 +94,19 @@ export const DEFAULT_BIOME_CONFIG: BiomeConfig = {
 
 /**
  * Get biome config by name with fallback to defaults
+ * @param biomeName - The biome name to look up
+ * @returns The biome configuration, or default config if not found
  */
 export function getBiomeConfig(biomeName: string): BiomeConfig {
-  return BIOME_CONFIGS[biomeName] || DEFAULT_BIOME_CONFIG;
+  const config = BIOME_CONFIGS[biomeName];
+
+  if (!config) {
+    console.warn(
+      `[BiomeConfig] Unknown biome "${biomeName}", using default config. Known biomes:`,
+      Object.keys(BIOME_CONFIGS)
+    );
+    return DEFAULT_BIOME_CONFIG;
+  }
+
+  return config;
 }
