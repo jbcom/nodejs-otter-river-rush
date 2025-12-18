@@ -244,7 +244,7 @@ test.describe('Gameplay', () => {
       const fps = await page.evaluate(() => {
         return new Promise<number>((resolve) => {
           let frames = 0;
-          let lastTime = performance.now();
+          const lastTime = performance.now();
 
           function measureFrame(): void {
             frames++;

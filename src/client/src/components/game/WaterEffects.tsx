@@ -1,16 +1,26 @@
-import React from 'react';
 import { AdvancedWater, Rain } from '@jbcom/strata';
+import type React from 'react';
+import { getBiomeConfig } from '../../config/biome-config';
 import { useBiome } from '../../ecs/biome-system';
 import { useGameStore } from '../../hooks/useGameStore';
-import { getBiomeConfig } from '../../config/biome-config';
+import { useMobileConstraints } from '../../hooks/useMobileConstraints';
+
+// Performance constants for water rendering
+const WATER_SEGMENTS = {
+  phone: 32, // Reduced for low-end mobile
+  tablet: 48, // Medium quality for tablets
+  desktop: 64, // Full quality for desktop
+} as const;
 
 /**
  * Water Effects using @jbcom/strata AdvancedWater
  * Provides advanced water rendering with caustics, foam, and reflections
+ * Performance optimized for mobile devices
  */
 export function WaterEffects(): React.JSX.Element | null {
   const { status } = useGameStore();
   const biome = useBiome();
+  const constraints = useMobileConstraints();
 
   // Get biome config from centralized config
   const biomeConfig = getBiomeConfig(biome.name);
@@ -21,12 +31,19 @@ export function WaterEffects(): React.JSX.Element | null {
   // Wave speed based on game state
   const waveSpeed = status === 'playing' ? 1.5 : 0.5;
 
+  // Reduce water segments on mobile for performance
+  const waterSegments = constraints.isPhone
+    ? WATER_SEGMENTS.phone
+    : constraints.isTablet
+      ? WATER_SEGMENTS.tablet
+      : WATER_SEGMENTS.desktop;
+
   return (
     <group>
       <AdvancedWater
         position={[0, -0.3, -5]}
         size={[40, 60]}
-        segments={64}
+        segments={waterSegments}
         color={waterColor}
         waveHeight={0.08}
         waveSpeed={waveSpeed}

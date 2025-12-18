@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import type React from 'react';
+import { useMemo } from 'react';
 import { Vector3 } from 'three';
 import { useGameStore } from '../../hooks/useGameStore';
 

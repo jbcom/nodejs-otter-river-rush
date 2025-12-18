@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import type React from 'react';
+import { useRef } from 'react';
 import * as THREE from 'three';
 
 interface EnergyOrbProps {

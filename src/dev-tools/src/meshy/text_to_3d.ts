@@ -8,7 +8,17 @@ import { MeshyBaseClient } from './base-client.js';
 
 export interface CreateTaskParams {
   text_prompt: string;
-  art_style?: 'realistic' | 'cartoon' | 'anime' | 'sculpture' | 'pbr' | 'realistic-3D' | 'voxel' | '3D Printing' | 'heroic fantasy' | 'dark fantasy';
+  art_style?:
+    | 'realistic'
+    | 'cartoon'
+    | 'anime'
+    | 'sculpture'
+    | 'pbr'
+    | 'realistic-3D'
+    | 'voxel'
+    | '3D Printing'
+    | 'heroic fantasy'
+    | 'dark fantasy';
   ai_model?: 'meshy-4' | 'meshy-5' | 'latest';
   topology?: 'triangle' | 'quad';
   target_polycount?: number;
@@ -42,11 +52,14 @@ export class TextTo3DAPI extends MeshyBaseClient {
   /**
    * Create a preview task (fast, lower quality)
    */
-  async createPreviewTask(params: CreateTaskParams, makeRequestWithRetry: (url: string, options: any) => Promise<any>): Promise<MeshyTask> {
+  async createPreviewTask(
+    params: CreateTaskParams,
+    makeRequestWithRetry: (url: string, options: any) => Promise<any>
+  ): Promise<MeshyTask> {
     const data = await makeRequestWithRetry(`${this.baseUrl}/text-to-3d`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -64,12 +77,12 @@ export class TextTo3DAPI extends MeshyBaseClient {
     });
 
     const taskId = data.result || data.id;
-    
+
     if (!taskId) {
       throw new Error('No task ID returned from createPreviewTask');
     }
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     return {
       id: taskId,
@@ -77,7 +90,7 @@ export class TextTo3DAPI extends MeshyBaseClient {
       progress: 0,
       model_urls: null,
       created_at: String(Date.now()),
-      finished_at: 0
+      finished_at: 0,
     };
   }
 
@@ -87,12 +100,16 @@ export class TextTo3DAPI extends MeshyBaseClient {
   async createRefineTask(
     previewTaskId: string,
     makeRequestWithRetry: (url: string, options: any) => Promise<any>,
-    params?: { enable_pbr?: boolean; texture_prompt?: string; ai_model?: string }
+    params?: {
+      enable_pbr?: boolean;
+      texture_prompt?: string;
+      ai_model?: string;
+    }
   ): Promise<MeshyTask> {
     const data = await makeRequestWithRetry(`${this.baseUrl}/text-to-3d`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -110,7 +127,7 @@ export class TextTo3DAPI extends MeshyBaseClient {
       progress: 0,
       model_urls: null,
       created_at: String(Date.now()),
-      finished_at: 0
+      finished_at: 0,
     };
   }
 
@@ -119,11 +136,11 @@ export class TextTo3DAPI extends MeshyBaseClient {
    */
   async getTask(taskId: string, retryOn404 = true): Promise<MeshyTask> {
     const maxRetries = retryOn404 ? 3 : 0;
-    
+
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       const response = await fetch(`${this.baseUrl}/text-to-3d/${taskId}`, {
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
+          Authorization: `Bearer ${this.apiKey}`,
         },
       });
 
@@ -133,8 +150,10 @@ export class TextTo3DAPI extends MeshyBaseClient {
 
       if (response.status === 404 && attempt < maxRetries) {
         const waitMs = 2000 * (attempt + 1);
-        console.log(`   ⏳ Task ${taskId.substring(0, 12)} not found yet, waiting ${waitMs/1000}s`);
-        await new Promise(resolve => setTimeout(resolve, waitMs));
+        console.log(
+          `   ⏳ Task ${taskId.substring(0, 12)} not found yet, waiting ${waitMs / 1000}s`
+        );
+        await new Promise((resolve) => setTimeout(resolve, waitMs));
         continue;
       }
 
@@ -148,7 +167,11 @@ export class TextTo3DAPI extends MeshyBaseClient {
   /**
    * Poll task until complete
    */
-  async pollTask(taskId: string, maxRetries = 60, intervalMs = 10000): Promise<MeshyTask> {
+  async pollTask(
+    taskId: string,
+    maxRetries = 60,
+    intervalMs = 10000
+  ): Promise<MeshyTask> {
     for (let i = 0; i < maxRetries; i++) {
       const task = await this.getTask(taskId);
 
@@ -161,7 +184,7 @@ export class TextTo3DAPI extends MeshyBaseClient {
         console.log(`  ⏳ Task ${taskId.substring(0, 12)}: ${task.progress}%`);
       }
 
-      await new Promise(resolve => setTimeout(resolve, intervalMs));
+      await new Promise((resolve) => setTimeout(resolve, intervalMs));
     }
 
     throw new Error(`Task ${taskId} timed out`);
@@ -174,13 +197,15 @@ export class TextTo3DAPI extends MeshyBaseClient {
     const response = await fetch(`${this.baseUrl}/text-to-3d/${taskId}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
       },
     });
 
     if (!response.ok) {
       const error = await response.text();
-      throw new Error(`Failed to delete task ${taskId}: ${response.status} - ${error}`);
+      throw new Error(
+        `Failed to delete task ${taskId}: ${response.status} - ${error}`
+      );
     }
   }
 
@@ -191,7 +216,7 @@ export class TextTo3DAPI extends MeshyBaseClient {
     const url = `${this.baseUrl}/text-to-3d?page_num=${pageNum}&page_size=${pageSize}`;
     const response = await fetch(url, {
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
       },
     });
 

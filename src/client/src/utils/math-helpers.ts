@@ -19,7 +19,7 @@ export function easeInOut(t: number): number {
 }
 
 export function easeOut(t: number): number {
-  return 1 - Math.pow(1 - t, 3);
+  return 1 - (1 - t) ** 3;
 }
 
 export function distance2D(

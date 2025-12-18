@@ -1,11 +1,12 @@
 #!/usr/bin/env node
+
 /**
  * Icon Post-Processor - Resizes and converts generated icons to proper formats
  */
 
-import sharp from 'sharp';
-import { readFileSync, writeFileSync, existsSync, unlinkSync } from 'fs';
+import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import sharp from 'sharp';
 
 const PUBLIC_DIR = join(process.cwd(), 'public');
 
@@ -98,8 +99,8 @@ async function resizeIcon(task: IconTask): Promise<void> {
 async function createFaviconICO(): Promise<void> {
   console.log('\n🎨 Creating favicon.ico...');
 
-  const sizes = [16, 32, 48];
-  const tempFiles: string[] = [];
+  const _sizes = [16, 32, 48];
+  const _tempFiles: string[] = [];
 
   try {
     // Check if we have the favicon source
@@ -118,17 +119,22 @@ async function createFaviconICO(): Promise<void> {
       // Copy 32x32 as .ico (browsers will accept it)
       const buffer = readFileSync(favicon32);
       writeFileSync(faviconOutput, buffer);
-      console.log(`   ✅ favicon.ico created (${Math.round(buffer.length / 1024)}KB)`);
+      console.log(
+        `   ✅ favicon.ico created (${Math.round(buffer.length / 1024)}KB)`
+      );
 
       // Clean up temp files
-      ['favicon-16.png', 'favicon-32.png', 'favicon-48.png', 'favicon-temp.png'].forEach(
-        file => {
-          const path = join(PUBLIC_DIR, file);
-          if (existsSync(path)) {
-            unlinkSync(path);
-          }
+      [
+        'favicon-16.png',
+        'favicon-32.png',
+        'favicon-48.png',
+        'favicon-temp.png',
+      ].forEach((file) => {
+        const path = join(PUBLIC_DIR, file);
+        if (existsSync(path)) {
+          unlinkSync(path);
         }
-      );
+      });
       console.log('   🧹 Cleaned up temporary files');
     }
   } catch (error) {
@@ -204,7 +210,9 @@ async function optimizeExistingImages(): Promise<void> {
       writeFileSync(fullPath, buffer);
 
       const newSize = buffer.length;
-      const savings = Math.round(((originalSize - newSize) / originalSize) * 100);
+      const savings = Math.round(
+        ((originalSize - newSize) / originalSize) * 100
+      );
 
       if (savings > 5) {
         console.log(

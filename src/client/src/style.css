@@ -38,7 +38,7 @@ body {
   overscroll-behavior-y: contain;
   touch-action: pan-x pan-y;
   /* Allow pan but prevent pinch-zoom */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #app {
@@ -84,10 +84,10 @@ a {
 
 :root {
   /* Primary Colors */
-  --otter-blue: #1E90FF;
-  --otter-orange: #FFA500;
-  --otter-tan: #D4A574;
-  --otter-brown: #8B4513;
+  --otter-blue: #1e90ff;
+  --otter-orange: #ffa500;
+  --otter-tan: #d4a574;
+  --otter-brown: #8b4513;
   --otter-brown-dark: #65320e;
 
   /* RGB Components for use with rgba() */
@@ -95,20 +95,20 @@ a {
   --otter-brown-dark-rgb: 101, 50, 14;
 
   /* Water Colors */
-  --water-light: #87CEEB;
-  --water-dark: #0066CC;
+  --water-light: #87ceeb;
+  --water-dark: #0066cc;
   --water-deep: #0a2540;
-  --splash-white: #FFFFFF;
+  --splash-white: #ffffff;
 
   /* Nature Colors */
-  --forest-green: #228B22;
+  --forest-green: #228b22;
   --forest-dark: #1a5c1a;
 
   /* UI States */
-  --ui-success: #4CAF50;
-  --ui-warning: #FF9800;
-  --ui-danger: #F44336;
-  --ui-neutral: #E0E0E0;
+  --ui-success: #4caf50;
+  --ui-warning: #ff9800;
+  --ui-danger: #f44336;
+  --ui-neutral: #e0e0e0;
 
   /* Shadows & Effects */
   --shadow-strong: 0 8px 16px rgba(0, 0, 0, 0.4);
@@ -141,7 +141,7 @@ a {
 
 .otter-text {
   font-size: 1rem;
-  color: #FFFFFF;
+  color: #ffffff;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
@@ -150,9 +150,11 @@ a {
    ============================================ */
 
 .otter-panel {
-  background: linear-gradient(135deg,
-      rgba(var(--otter-brown-rgb), 0.95) 0%,
-      rgba(var(--otter-brown-dark-rgb), 0.95) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--otter-brown-rgb), 0.95) 0%,
+    rgba(var(--otter-brown-dark-rgb), 0.95) 100%
+  );
   border: 4px solid var(--otter-tan);
   border-radius: 20px;
   box-shadow:
@@ -164,28 +166,31 @@ a {
 }
 
 .otter-panel::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 6px;
-  background: linear-gradient(90deg,
-      var(--otter-tan) 0%,
-      var(--otter-orange) 50%,
-      var(--otter-tan) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--otter-tan) 0%,
+    var(--otter-orange) 50%,
+    var(--otter-tan) 100%
+  );
 }
 
 .otter-panel::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background:
-    repeating-linear-gradient(0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.05) 2px,
-      rgba(0, 0, 0, 0.05) 4px);
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.05) 2px,
+    rgba(0, 0, 0, 0.05) 4px
+  );
   pointer-events: none;
 }
 
@@ -214,12 +219,14 @@ a {
 }
 
 .otter-btn::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      transparent 50%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    transparent 50%
+  );
   pointer-events: none;
 }
 
@@ -235,33 +242,29 @@ a {
 
 /* Button Variants */
 .otter-btn-primary {
-  background: linear-gradient(135deg,
-      var(--otter-blue) 0%,
-      var(--water-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--otter-blue) 0%,
+    var(--water-dark) 100%
+  );
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .otter-btn-secondary {
-  background: linear-gradient(135deg,
-      var(--otter-orange) 0%,
-      #ff8c00 100%);
+  background: linear-gradient(135deg, var(--otter-orange) 0%, #ff8c00 100%);
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .otter-btn-success {
-  background: linear-gradient(135deg,
-      var(--ui-success) 0%,
-      #388E3C 100%);
+  background: linear-gradient(135deg, var(--ui-success) 0%, #388e3c 100%);
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .otter-btn-warning {
-  background: linear-gradient(135deg,
-      var(--ui-warning) 0%,
-      #F57C00 100%);
+  background: linear-gradient(135deg, var(--ui-warning) 0%, #f57c00 100%);
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -271,9 +274,11 @@ a {
    ============================================ */
 
 .otter-mode-card {
-  background: linear-gradient(135deg,
-      rgba(30, 144, 255, 0.15) 0%,
-      rgba(0, 102, 204, 0.15) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(30, 144, 255, 0.15) 0%,
+    rgba(0, 102, 204, 0.15) 100%
+  );
   border: 3px solid var(--otter-blue);
   border-radius: 15px;
   padding: 1.5rem;
@@ -284,15 +289,17 @@ a {
 }
 
 .otter-mode-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -50%;
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle,
-      rgba(255, 255, 255, 0.1) 0%,
-      transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 70%
+  );
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -317,9 +324,7 @@ a {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg,
-      var(--otter-orange) 0%,
-      #ff8c00 100%);
+  background: linear-gradient(135deg, var(--otter-orange) 0%, #ff8c00 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -388,7 +393,6 @@ a {
 }
 
 @keyframes otterBounce {
-
   0%,
   100% {
     transform: translateY(0);
@@ -400,7 +404,6 @@ a {
 }
 
 @keyframes wavingHand {
-
   0%,
   100% {
     transform: rotate(0deg);
@@ -440,9 +443,11 @@ a {
    ============================================ */
 
 .otter-hud-panel {
-  background: linear-gradient(135deg,
-      rgba(var(--otter-brown-rgb), 0.9) 0%,
-      rgba(var(--otter-brown-dark-rgb), 0.9) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--otter-brown-rgb), 0.9) 0%,
+    rgba(var(--otter-brown-dark-rgb), 0.9) 100%
+  );
   border: 2px solid var(--otter-tan);
   border-radius: 12px;
   padding: 0.75rem 1.25rem;
@@ -504,7 +509,7 @@ a {
 }
 
 .otter-speech-bubble::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -15px;
   left: 30px;
@@ -521,16 +526,20 @@ a {
    ============================================ */
 
 .game-bg-river {
-  background: linear-gradient(180deg,
-      var(--water-light) 0%,
-      var(--otter-blue) 50%,
-      var(--water-dark) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--water-light) 0%,
+    var(--otter-blue) 50%,
+    var(--water-dark) 100%
+  );
 }
 
 .game-bg-overlay {
-  background: linear-gradient(180deg,
-      rgba(10, 37, 64, 0.95) 0%,
-      rgba(10, 37, 64, 0.98) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(10, 37, 64, 0.95) 0%,
+    rgba(10, 37, 64, 0.98) 100%
+  );
   backdrop-filter: blur(8px);
 }
 
@@ -588,7 +597,6 @@ a {
    ============================================ */
 
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {
@@ -663,31 +671,39 @@ a {
 
 /* Top 3 special styling */
 .top-1 {
-  background: linear-gradient(to right,
-      rgba(255, 215, 0, 0.3),
-      rgba(255, 215, 0, 0.1));
+  background: linear-gradient(
+    to right,
+    rgba(255, 215, 0, 0.3),
+    rgba(255, 215, 0, 0.1)
+  );
   border: 3px solid gold;
 }
 
 .top-2 {
-  background: linear-gradient(to right,
-      rgba(192, 192, 192, 0.3),
-      rgba(192, 192, 192, 0.1));
+  background: linear-gradient(
+    to right,
+    rgba(192, 192, 192, 0.3),
+    rgba(192, 192, 192, 0.1)
+  );
   border: 3px solid silver;
 }
 
 .top-3 {
-  background: linear-gradient(to right,
-      rgba(205, 127, 50, 0.3),
-      rgba(205, 127, 50, 0.1));
-  border: 3px solid #CD7F32;
+  background: linear-gradient(
+    to right,
+    rgba(205, 127, 50, 0.3),
+    rgba(205, 127, 50, 0.1)
+  );
+  border: 3px solid #cd7f32;
 }
 
 /* Stats display styles */
 .stat-category {
-  background: linear-gradient(135deg,
-      rgba(var(--otter-brown-rgb), 0.8) 0%,
-      rgba(var(--otter-brown-dark-rgb), 0.8) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--otter-brown-rgb), 0.8) 0%,
+    rgba(var(--otter-brown-dark-rgb), 0.8) 100%
+  );
   border: 2px solid var(--otter-tan);
   border-radius: 12px;
   padding: 1rem;
@@ -744,7 +760,6 @@ a {
 
 /* Loading animation for sprites */
 @keyframes pulse {
-
   0%,
   100% {
     opacity: 1;

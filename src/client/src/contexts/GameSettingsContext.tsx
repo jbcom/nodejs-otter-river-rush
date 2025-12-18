@@ -4,7 +4,8 @@
  * Provides game configuration settings to all components.
  */
 
-import React, { createContext, useContext } from 'react';
+import type React from 'react';
+import { createContext, useContext } from 'react';
 
 export interface GameSettings {
   /** Show performance stats overlay */

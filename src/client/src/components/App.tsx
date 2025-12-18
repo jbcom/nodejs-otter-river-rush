@@ -1,10 +1,10 @@
-import React from 'react';
+import type React from 'react';
+import { useGameSettings } from '../contexts/GameSettingsContext';
+import { useGameStore } from '../hooks/useGameStore';
 import { GameCanvas } from './game/GameCanvas';
-import { MainMenu } from './ui/MainMenu';
 import { GameHUD } from './ui/GameHUD';
 import { GameOver } from './ui/GameOver';
-import { useGameStore } from '../hooks/useGameStore';
-import { useGameSettings } from '../contexts/GameSettingsContext';
+import { MainMenu } from './ui/MainMenu';
 
 export function App(): React.JSX.Element {
   const { status } = useGameStore();

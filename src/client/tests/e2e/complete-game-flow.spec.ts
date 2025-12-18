@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 /**
  * Compositional Flow Tests - Verify COMPLETE game sequences work end-to-end

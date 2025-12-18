@@ -22,7 +22,7 @@ export class StorageManager {
     const result = { ...target } as SaveData;
 
     for (const key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
+      if (Object.hasOwn(source, key)) {
         const sourceValue = source[key as keyof SaveData];
         const targetValue = result[key as keyof SaveData];
 
@@ -56,8 +56,8 @@ export class StorageManager {
    */
   static save(data: Partial<SaveData>): void {
     try {
-      const existing = this.load() || this.getDefaultData();
-      const merged = this.deepMerge(existing, data);
+      const existing = StorageManager.load() || StorageManager.getDefaultData();
+      const merged = StorageManager.deepMerge(existing, data);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
     } catch (error) {
       console.error('Failed to save data:', error);

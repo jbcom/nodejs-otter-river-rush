@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { useGLTF } from '@react-three/drei';
+import { useEffect, useState } from 'react';
 import { ASSET_URLS } from '../config/game-constants';
 
 export function useAssetPreloader() {

@@ -1,7 +1,6 @@
-import { useMemo } from 'react';
 import { useEntities } from 'miniplex-react';
-import { world, queries, type Entity } from '../ecs/world';
-import type { With } from 'miniplex';
+import { useMemo } from 'react';
+import { type Entity, queries, world } from '../ecs/world';
 
 export function usePlayer() {
   const players = useEntities(queries.player);

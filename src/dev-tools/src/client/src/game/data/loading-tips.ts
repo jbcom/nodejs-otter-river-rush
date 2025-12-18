@@ -1,4 +1,4 @@
-export const LOADING_TIPS = const loadingTips = [
+export const LOADING_TIPS = const _loadingTips = [
   "Otters hold hands while sleeping so they don't drift apart!",
   "Chain dodges to build your combo multiplier",
   "The shield power-up can save you from one hit",

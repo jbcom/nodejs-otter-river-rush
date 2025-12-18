@@ -4,13 +4,13 @@
  */
 
 import { generateText } from 'ai';
-import { CLAUDE_SONNET_4_5 } from '../config/ai-constants';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
+import { CLAUDE_SONNET_4_5 } from '../config/ai-constants';
 
 async function generateLevelPatterns() {
   console.log('🗺️ Generating Level Patterns with Claude...');
-  
+
   const { text } = await generateText({
     model: CLAUDE_SONNET_4_5,
     prompt: `Design 15 challenging and varied obstacle patterns for "Otter River Rush", a 3-lane endless runner.

@@ -4,11 +4,12 @@
  * Replaces custom heightmap generation with strata's GPU-optimized system
  */
 
-import React, { Suspense } from 'react';
 import { GrassInstances, RockInstances } from '@jbcom/strata';
+import type React from 'react';
+import { Suspense } from 'react';
+import { getBiomeConfig } from '../../config/biome-config';
 import { useBiome } from '../../ecs/biome-system';
 import { useMobileConstraints } from '../../hooks/useMobileConstraints';
-import { getBiomeConfig } from '../../config/biome-config';
 
 /**
  * Simple heightmap function for terrain

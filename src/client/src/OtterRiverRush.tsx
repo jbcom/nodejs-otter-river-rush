@@ -20,7 +20,8 @@
  * ```
  */
 
-import React, { useEffect, useMemo } from 'react';
+import type React from 'react';
+import { useEffect, useMemo } from 'react';
 import { App } from './components/App';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { GameSettingsProvider } from './contexts/GameSettingsContext';
@@ -91,13 +92,25 @@ export function OtterRiverRush({
     overflow: 'hidden',
   };
 
+  /**
+   * Safely initialize audio on user interaction.
+   * Wrapped in try-catch to prevent silent failures in embedded contexts.
+   */
+  const handleAudioInit = () => {
+    try {
+      audio.init();
+    } catch (error) {
+      console.warn('[OtterRiverRush] Audio initialization failed:', error);
+    }
+  };
+
   return (
     <ErrorBoundary>
       <GameSettingsProvider settings={gameSettings}>
         <div
           className={`otter-river-rush-container ${className}`}
           style={containerStyle}
-          onClick={() => audio.init()}
+          onClick={handleAudioInit}
         >
           <App />
         </div>
@@ -106,11 +119,10 @@ export function OtterRiverRush({
   );
 }
 
-// Re-export types
-export type { GameState, GameStatus } from './types/game-types';
-
 // Export store for advanced usage
 export { useGameStore } from './hooks/useGameStore';
+// Re-export types
+export type { GameState, GameStatus } from './types/game-types';
 
 // Export audio controls
 export { audio } from './utils/audio';

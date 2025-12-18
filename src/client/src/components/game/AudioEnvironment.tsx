@@ -3,16 +3,16 @@
  * Provides ambient audio, positional sounds, and weather audio
  */
 
-import React from 'react';
 import {
-  AudioProvider,
-  AudioListener,
   AmbientAudio,
+  AudioListener,
+  AudioProvider,
   WeatherAudio,
 } from '@jbcom/strata';
+import type React from 'react';
+import { getBiomeConfig } from '../../config/biome-config';
 import { useBiome } from '../../ecs/biome-system';
 import { useGameStore } from '../../hooks/useGameStore';
-import { getBiomeConfig } from '../../config/biome-config';
 
 interface AudioEnvironmentProps {
   children: React.ReactNode;

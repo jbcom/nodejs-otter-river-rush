@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 
 export function useAnimationMixer(
   modelUrl: string,

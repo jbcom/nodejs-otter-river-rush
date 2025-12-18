@@ -1,5 +1,5 @@
-import { world, queries, spawn, type Entity } from '../ecs/world';
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { expect } from 'vitest';
+import { type Entity, queries, spawn, world } from '../ecs/world';
 
 export class TestWorld {
   private entities: Entity[] = [];

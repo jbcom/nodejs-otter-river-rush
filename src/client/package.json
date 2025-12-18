@@ -39,7 +39,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:e2e": "playwright test",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "biome check src",
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
@@ -62,17 +62,16 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.47.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
     "@types/howler": "^2.2.11",
     "@types/node": "^24.9.1",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@types/three": "^0.181.0",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.21",
     "daisyui": "^5.3.9",
-    "eslint": "^9.0.0",
     "postcss": "^8.5.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

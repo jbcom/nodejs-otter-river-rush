@@ -1,5 +1,5 @@
-import type { Entity } from '../ecs/world';
 import type { With } from 'miniplex';
+import type { Entity } from '../ecs/world';
 
 export interface AABB {
   minX: number;

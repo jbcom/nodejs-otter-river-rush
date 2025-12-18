@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 /**
  * Composition Tests - Verify visual layout and element positioning
@@ -17,7 +17,7 @@ test.describe('Visual Composition Tests', () => {
   }) => {
     // Wait for game to load
     await page.waitForSelector('#app', { timeout: 10000 });
-    
+
     // Start the game to render the canvas
     await page.click('#classicButton');
     await page.waitForTimeout(1000); // Wait for canvas to render
@@ -72,21 +72,24 @@ test.describe('Visual Composition Tests', () => {
     // Start the game first to render the canvas
     await page.click('#classicButton');
     await page.waitForSelector('canvas', { timeout: 10000 });
-    
+
     // Wait longer for the canvas to properly size
     await page.waitForTimeout(2000);
 
     const canvasLayout = await page.evaluate(() => {
       const canvases = document.querySelectorAll('canvas');
       console.log('Found canvases:', canvases.length);
-      
+
       // Get the largest canvas (likely the Three.js canvas)
       const canvas = Array.from(canvases).reduce((largest, current) => {
         const currentRect = current.getBoundingClientRect();
         const largestRect = largest.getBoundingClientRect();
-        return (currentRect.width * currentRect.height) > (largestRect.width * largestRect.height) ? current : largest;
+        return currentRect.width * currentRect.height >
+          largestRect.width * largestRect.height
+          ? current
+          : largest;
       });
-      
+
       if (!canvas) return null;
 
       const rect = canvas.getBoundingClientRect();
@@ -107,7 +110,7 @@ test.describe('Visual Composition Tests', () => {
 
     expect(canvasLayout).not.toBeNull();
     expect(canvasLayout?.isVisible).toBe(true);
-    
+
     // Debug logging
     console.log('Canvas dimensions:', {
       canvasWidth: canvasLayout?.canvasWidth,
@@ -115,10 +118,14 @@ test.describe('Visual Composition Tests', () => {
       viewportWidth: canvasLayout?.viewportWidth,
       viewportHeight: canvasLayout?.viewportHeight,
       fillsViewport: canvasLayout?.fillsViewport,
-      widthRatio: canvasLayout ? canvasLayout.canvasWidth / canvasLayout.viewportWidth : 0,
-      heightRatio: canvasLayout ? canvasLayout.canvasHeight / canvasLayout.viewportHeight : 0,
+      widthRatio: canvasLayout
+        ? canvasLayout.canvasWidth / canvasLayout.viewportWidth
+        : 0,
+      heightRatio: canvasLayout
+        ? canvasLayout.canvasHeight / canvasLayout.viewportHeight
+        : 0,
     });
-    
+
     expect(canvasLayout?.fillsViewport).toBe(true);
 
     console.log('✅ Canvas fills viewport correctly');
@@ -267,13 +274,15 @@ test.describe('Responsive Design Tests - Multiple Screen Sizes', () => {
           '#classicButton, #timeTrialButton, #zenButton, #dailyButton'
         );
         const title = document.querySelector('h1');
-        
+
         // Debug: log the actual elements found
         console.log('Elements found:', {
           startScreen: !!startScreen,
           menuContainer: !!menuContainer,
           menuContainerClasses: menuContainer?.className,
-          menuContainerStyle: menuContainer ? window.getComputedStyle(menuContainer).position : 'none',
+          menuContainerStyle: menuContainer
+            ? window.getComputedStyle(menuContainer).position
+            : 'none',
         });
 
         if (!startScreen || !menuContainer || !title) {
@@ -305,10 +314,11 @@ test.describe('Responsive Design Tests - Multiple Screen Sizes', () => {
         const centerOffset = Math.abs(
           containerRect.left + containerRect.width / 2 - viewportWidth / 2
         );
-        
+
         // More lenient centering tolerance for tablet viewports
-        const centeringTolerance = viewportWidth > 1000 ? 220 : viewportWidth > 600 ? 120 : 50;
-        
+        const centeringTolerance =
+          viewportWidth > 1000 ? 220 : viewportWidth > 600 ? 120 : 50;
+
         return {
           isValid: true,
           viewportWidth,

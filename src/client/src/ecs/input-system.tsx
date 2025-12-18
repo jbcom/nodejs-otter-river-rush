@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { queries } from './world';
 import { useGameStore } from '../hooks/useGameStore';
+import { queries } from './world';
 
 const LANES = [-2, 0, 2];
 const playerEntities = queries.player;

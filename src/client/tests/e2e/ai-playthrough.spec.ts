@@ -124,7 +124,7 @@ interface Decision {
 
 function makeDecision(state: GameState): Decision {
   // Default: stay in current lane
-  let bestDecision: Decision = {
+  const bestDecision: Decision = {
     action: 'stay',
     goal: 'maintain_position',
     priority: 1,

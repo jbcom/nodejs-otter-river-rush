@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { ParticleBurst } from '@jbcom/strata';
+import type React from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { queries } from '../../ecs/world';
 
 interface Burst {

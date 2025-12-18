@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { queries } from './world';
 import { useGameStore } from '../hooks/useGameStore';
+import { queries } from './world';
 
 const ACHIEVEMENTS = {
   FIRST_COIN: {

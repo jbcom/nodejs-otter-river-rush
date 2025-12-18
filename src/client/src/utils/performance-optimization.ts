@@ -1,5 +1,3 @@
-import type { Entity } from '../ecs/world';
-
 export class ObjectPool<T> {
   private available: T[] = [];
   private inUse = new Set<T>();

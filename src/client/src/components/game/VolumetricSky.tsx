@@ -8,15 +8,15 @@
  * - Desktop: 60 FPS with high quality
  */
 
-import React from 'react';
 import {
+  createTimeOfDay,
   ProceduralSky,
   VolumetricClouds,
-  createTimeOfDay,
 } from '@jbcom/strata';
+import type React from 'react';
+import { getBiomeConfig } from '../../config/biome-config';
 import { useBiome } from '../../ecs/biome-system';
 import { useMobileConstraints } from '../../hooks/useMobileConstraints';
-import { getBiomeConfig } from '../../config/biome-config';
 
 interface VolumetricSkyProps {
   timeOfDay?: number; // 0-24 (for future day/night cycle)

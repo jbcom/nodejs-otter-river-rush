@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { queries, world } from './world';
 import { useGameStore } from '../hooks/useGameStore';
+import { queries } from './world';
 
 // Audio manager singleton
 class AudioManager {

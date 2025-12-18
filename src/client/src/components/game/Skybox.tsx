@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { useBiome } from '../../ecs/biome-system';
 import { useGameStore } from '../../hooks/useGameStore';
 

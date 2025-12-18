@@ -38,7 +38,7 @@ export function calculateTrajectory(
   const points: THREE.Vector3[] = [];
   const dt = 0.1;
 
-  let pos = startPos.clone();
+  const pos = startPos.clone();
   let vel = velocity.clone();
 
   for (let i = 0; i < steps; i++) {

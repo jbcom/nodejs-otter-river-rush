@@ -83,7 +83,7 @@ export function createPatternTexture(
   const ctx = canvas.getContext('2d')!;
 
   switch (pattern) {
-    case 'dots':
+    case 'dots': {
       ctx.fillStyle = color2;
       ctx.fillRect(0, 0, size, size);
       ctx.fillStyle = color1;
@@ -96,16 +96,18 @@ export function createPatternTexture(
         }
       }
       break;
+    }
 
-    case 'stripes':
+    case 'stripes': {
       const stripeWidth = size / 8;
       for (let i = 0; i < size; i += stripeWidth * 2) {
         ctx.fillStyle = i % (stripeWidth * 4) === 0 ? color1 : color2;
         ctx.fillRect(i, 0, stripeWidth, size);
       }
       break;
+    }
 
-    case 'checkerboard':
+    case 'checkerboard': {
       const checkSize = size / 8;
       for (let x = 0; x < size; x += checkSize) {
         for (let y = 0; y < size; y += checkSize) {
@@ -117,8 +119,9 @@ export function createPatternTexture(
         }
       }
       break;
+    }
 
-    case 'grid':
+    case 'grid': {
       ctx.fillStyle = color2;
       ctx.fillRect(0, 0, size, size);
       ctx.strokeStyle = color1;
@@ -135,6 +138,7 @@ export function createPatternTexture(
         ctx.stroke();
       }
       break;
+    }
   }
 
   const texture = new THREE.CanvasTexture(canvas);

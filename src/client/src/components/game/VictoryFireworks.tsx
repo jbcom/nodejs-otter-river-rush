@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import type React from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 interface Firework {

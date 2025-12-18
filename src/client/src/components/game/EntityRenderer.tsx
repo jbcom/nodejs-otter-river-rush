@@ -4,7 +4,8 @@
  */
 
 import { useAnimations, useGLTF } from '@react-three/drei';
-import React, { useEffect, useMemo, useRef } from 'react';
+import type React from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import type { Group } from 'three';
 import { ECS, queries } from '../../ecs/world';
 

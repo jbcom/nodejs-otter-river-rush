@@ -1,6 +1,7 @@
 import { PerspectiveCamera, Stats } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import React, { Suspense, useEffect, useRef } from 'react';
+import type React from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { VISUAL } from '../../config/visual-constants';
 import { AchievementSystem } from '../../ecs/achievement-system';
 import { BiomeSystem } from '../../ecs/biome-system';

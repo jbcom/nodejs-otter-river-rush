@@ -1,8 +1,8 @@
-import React from 'react';
 import { Water } from '@jbcom/strata';
-import { useGameStore } from '../../hooks/useGameStore';
-import { useBiome } from '../../ecs/biome-system';
+import type React from 'react';
 import { getBiomeConfig } from '../../config/biome-config';
+import { useBiome } from '../../ecs/biome-system';
+import { useGameStore } from '../../hooks/useGameStore';
 
 /**
  * River Component using @jbcom/strata Water

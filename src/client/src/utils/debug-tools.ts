@@ -1,4 +1,4 @@
-import { world, queries, type Entity } from '../ecs/world';
+import { queries, world } from '../ecs/world';
 
 export const debugTools = {
   // Entity inspection

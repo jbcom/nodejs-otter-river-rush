@@ -4,7 +4,7 @@
  * This test MUST pass or the app is broken
  */
 
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test.describe('Critical Smoke Test - Real User Flow', () => {
   test('app loads, renders React, shows menu, starts game, renders canvas', async ({

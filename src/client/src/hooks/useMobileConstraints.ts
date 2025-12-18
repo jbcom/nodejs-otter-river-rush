@@ -51,7 +51,7 @@ const detectDeviceType = (): { isPhone: boolean; isTablet: boolean } => {
   const width = window.innerWidth;
   const height = window.innerHeight;
   const minDimension = Math.min(width, height);
-  const maxDimension = Math.max(width, height);
+  const _maxDimension = Math.max(width, height);
 
   // Tablet: min dimension >= 600px
   const isTablet = minDimension >= 600;

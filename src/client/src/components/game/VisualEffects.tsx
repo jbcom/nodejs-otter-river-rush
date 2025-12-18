@@ -1,9 +1,9 @@
-import React from 'react';
-import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { CloudSky, EnhancedFog } from '@jbcom/strata';
-import { useGameStore } from '../../hooks/useGameStore';
-import { useBiome } from '../../ecs/biome-system';
+import { Bloom, EffectComposer, Vignette } from '@react-three/postprocessing';
+import type React from 'react';
 import { getBiomeConfig } from '../../config/biome-config';
+import { useBiome } from '../../ecs/biome-system';
+import { useGameStore } from '../../hooks/useGameStore';
 
 /**
  * Visual Effects using @jbcom/strata

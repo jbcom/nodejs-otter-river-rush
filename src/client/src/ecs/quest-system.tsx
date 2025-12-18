@@ -1,7 +1,6 @@
-import { useEffect, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useEffect, useRef } from 'react';
 import { useGameStore } from '../hooks/useGameStore';
-import { queries } from './world';
 
 interface Quest {
   id: string;

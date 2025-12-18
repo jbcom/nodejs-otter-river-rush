@@ -1,8 +1,8 @@
-import { world, type Entity } from '../ecs/world';
 import type { With } from 'miniplex';
+import { type Entity } from '../ecs/world';
 import { randomInt } from './math-helpers';
 
-export function findNearestEntity<T extends keyof Entity>(
+export function findNearestEntity<_T extends keyof Entity>(
   fromX: number,
   fromY: number,
   entities: Iterable<Entity>,

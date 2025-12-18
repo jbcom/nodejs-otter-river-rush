@@ -54,8 +54,8 @@ export const easing = {
   easeInOutCubic: (t: number): number =>
     t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
 
-  easeInExpo: (t: number): number => (t === 0 ? 0 : Math.pow(2, 10 * (t - 1))),
-  easeOutExpo: (t: number): number => (t === 1 ? 1 : -Math.pow(2, -10 * t) + 1),
+  easeInExpo: (t: number): number => (t === 0 ? 0 : 2 ** (10 * (t - 1))),
+  easeOutExpo: (t: number): number => (t === 1 ? 1 : -(2 ** (-10 * t)) + 1),
 
   easeInElastic: (t: number): number => {
     const c4 = (2 * Math.PI) / 3;
@@ -63,7 +63,7 @@ export const easing = {
       ? 0
       : t === 1
         ? 1
-        : -Math.pow(2, 10 * t - 10) * Math.sin((t * 10 - 10.75) * c4);
+        : -(2 ** (10 * t - 10)) * Math.sin((t * 10 - 10.75) * c4);
   },
 
   easeOutBounce: (t: number): number => {

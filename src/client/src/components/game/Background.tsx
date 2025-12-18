@@ -1,5 +1,5 @@
-import React from 'react';
-import { ProceduralSky, createTimeOfDay } from '@jbcom/strata';
+import { createTimeOfDay, ProceduralSky } from '@jbcom/strata';
+import type React from 'react';
 
 /**
  * Background Component using @jbcom/strata
