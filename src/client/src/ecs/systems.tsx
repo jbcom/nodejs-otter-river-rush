@@ -82,8 +82,14 @@ export function CollisionSystem() {
     // Check obstacle collisions
     for (const obstacle of obstacleEntities) {
       if (player.collider && obstacle.collider) {
-        const playerWithCollider = player as With<Entity, 'position' | 'collider'>;
-        const obstacleWithCollider = obstacle as With<Entity, 'position' | 'collider'>;
+        const playerWithCollider = player as With<
+          Entity,
+          'position' | 'collider'
+        >;
+        const obstacleWithCollider = obstacle as With<
+          Entity,
+          'position' | 'collider'
+        >;
         if (checkCollision(playerWithCollider, obstacleWithCollider)) {
           handleObstacleHit(player, obstacle);
         }
@@ -94,8 +100,14 @@ export function CollisionSystem() {
     const enemies = queries.enemies || [];
     for (const enemy of enemies) {
       if (player.collider && enemy.collider) {
-        const playerWithCollider = player as With<Entity, 'position' | 'collider'>;
-        const enemyWithCollider = enemy as With<Entity, 'position' | 'collider'>;
+        const playerWithCollider = player as With<
+          Entity,
+          'position' | 'collider'
+        >;
+        const enemyWithCollider = enemy as With<
+          Entity,
+          'position' | 'collider'
+        >;
         if (checkCollision(playerWithCollider, enemyWithCollider)) {
           handleEnemyHit(player, enemy);
         }
@@ -105,8 +117,14 @@ export function CollisionSystem() {
     // Check collectible collisions
     for (const collectible of collectibleEntities) {
       if (player.collider && collectible.collider) {
-        const playerWithCollider = player as With<Entity, 'position' | 'collider'>;
-        const collectibleWithCollider = collectible as With<Entity, 'position' | 'collider'>;
+        const playerWithCollider = player as With<
+          Entity,
+          'position' | 'collider'
+        >;
+        const collectibleWithCollider = collectible as With<
+          Entity,
+          'position' | 'collider'
+        >;
         if (checkCollision(playerWithCollider, collectibleWithCollider)) {
           handleCollect(player, collectible);
         }

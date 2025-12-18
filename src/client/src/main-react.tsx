@@ -36,10 +36,12 @@ import('./hooks/useGameStore').then(({ useGameStore }) => {
   (window as { __gameStore?: unknown }).__gameStore = useGameStore;
 });
 
-// Load debug tools
-import('./utils/debug-tools').then(({ debugTools }) => {
-  window.__debug = debugTools;
-});
+// Load debug tools only in development mode
+if (import.meta.env.DEV) {
+  import('./utils/debug-tools').then(({ debugTools }) => {
+    window.__debug = debugTools;
+  });
+}
 
 // Preload audio
 import('./utils/audio').then(({ audio }) => {
