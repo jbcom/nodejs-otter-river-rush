@@ -2,7 +2,7 @@
  * Collision detection utilities
  */
 
-import type { Vector2D, Bounds, Collider } from '@/types/Game.types';
+import type { Bounds, Collider, Vector2D } from '@/types/Game.types';
 
 /**
  * Check AABB collision

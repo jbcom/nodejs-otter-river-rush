@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useGameStore } from './useGameStore';
 import { StorageManager } from '../utils/StorageManager';
+import { useGameStore } from './useGameStore';
 
 export function usePersistence() {
   const { highScore, score } = useGameStore();

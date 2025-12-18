@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useEffect, useRef } from 'react';
 import { useGameStore } from '../hooks/useGameStore';
 import { queries } from './world';
 
@@ -146,9 +146,6 @@ export function QuestSystem(): null {
         if (quest.reward.gems) {
           useGameStore.getState().collectGem(quest.reward.gems);
         }
-
-        // Show notification
-        console.log(`Quest completed: ${quest.title}`);
       }
     });
   });

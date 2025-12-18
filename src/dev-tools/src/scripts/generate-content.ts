@@ -4,13 +4,11 @@
  */
 
 import { generateText } from 'ai';
-import { CLAUDE_SONNET_4_5 } from '../config/ai-constants';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
+import { CLAUDE_SONNET_4_5 } from '../config/ai-constants';
 
 async function generateEnemyBehaviors() {
-  console.log('🤖 Generating Enemy AI Behaviors with Claude...');
-  
   const { text } = await generateText({
     model: CLAUDE_SONNET_4_5,
     prompt: `You're a game designer for an endless runner called "Otter River Rush". Design 6 enemy types with AI behaviors using Yuka.js steering behaviors.
@@ -41,16 +39,21 @@ export const ENEMY_DEFINITIONS = [
   const tsCode = text.match(/```typescript\n([\s\S]*?)\n```/)?.[1];
   if (tsCode) {
     writeFileSync(
-      join(process.cwd(), 'src', 'client', 'src', 'game', 'data', 'enemy-definitions.ts'),
+      join(
+        process.cwd(),
+        'src',
+        'client',
+        'src',
+        'game',
+        'data',
+        'enemy-definitions.ts'
+      ),
       tsCode
     );
-    console.log('✅ Enemy behaviors generated!');
   }
 }
 
 async function generateAchievements() {
-  console.log('🏆 Generating Achievement Definitions with Claude...');
-  
   const { text } = await generateText({
     model: CLAUDE_SONNET_4_5,
     prompt: `Design 30 creative achievements for "Otter River Rush" - an endless runner game.
@@ -86,16 +89,21 @@ export const ACHIEVEMENT_DEFINITIONS = [
   const tsCode = text.match(/```typescript\n([\s\S]*?)\n```/)?.[1];
   if (tsCode) {
     writeFileSync(
-      join(process.cwd(), 'src', 'client', 'src', 'game', 'data', 'achievement-definitions.ts'),
+      join(
+        process.cwd(),
+        'src',
+        'client',
+        'src',
+        'game',
+        'data',
+        'achievement-definitions.ts'
+      ),
       tsCode
     );
-    console.log('✅ Achievements generated!');
   }
 }
 
 async function generateLevelPatterns() {
-  console.log('🗺️ Generating Level Patterns with Claude...');
-  
   const { text } = await generateText({
     model: CLAUDE_SONNET_4_5,
     prompt: `Design 15 obstacle patterns for "Otter River Rush" (3-lane endless runner).
@@ -135,16 +143,21 @@ export const LEVEL_PATTERNS = [
   const tsCode = text.match(/```typescript\n([\s\S]*?)\n```/)?.[1];
   if (tsCode) {
     writeFileSync(
-      join(process.cwd(), 'src', 'client', 'src', 'game', 'data', 'level-patterns.ts'),
+      join(
+        process.cwd(),
+        'src',
+        'client',
+        'src',
+        'game',
+        'data',
+        'level-patterns.ts'
+      ),
       tsCode
     );
-    console.log('✅ Level patterns generated!');
   }
 }
 
 async function generateGameTips() {
-  console.log('💡 Generating Loading Tips with Claude...');
-  
   const { text } = await generateText({
     model: CLAUDE_SONNET_4_5,
     prompt: `Write 25 helpful, fun loading screen tips for "Otter River Rush". Mix gameplay tips with otter facts and humor.
@@ -159,16 +172,21 @@ Output as TypeScript array.`,
 
   const tsCode = text.match(/```typescript\n([\s\S]*?)\n```/)?.[1] || text;
   writeFileSync(
-    join(process.cwd(), 'src', 'client', 'src', 'game', 'data', 'loading-tips.ts'),
+    join(
+      process.cwd(),
+      'src',
+      'client',
+      'src',
+      'game',
+      'data',
+      'loading-tips.ts'
+    ),
     `export const LOADING_TIPS = ${tsCode};`
   );
-  console.log('✅ Loading tips generated!');
 }
 
 // Run all generators
 async function main() {
-  console.log('🚀 Starting AI Content Generation...\n');
-  
   // Create data directory if it doesn't exist
   const { mkdirSync, existsSync } = await import('fs');
   const dataDir = join(process.cwd(), 'src', 'client', 'src', 'game', 'data');
@@ -182,15 +200,8 @@ async function main() {
     await generateAchievements();
     await generateLevelPatterns();
     await generateGameTips();
-    
-    console.log('\n✨ AI Content Generation Complete!');
-    console.log('📁 Files created in src/client/src/game/data/');
-    
-    // Step 2: Cascade to model generation
-    console.log('\n🎨 Cascading to 3D model generation...\n');
     const { generateEnemyModels } = await import('../generators/enemy-models');
     await generateEnemyModels();
-    
   } catch (error) {
     console.error('❌ Error:', error);
   }

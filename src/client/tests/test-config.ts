@@ -4,11 +4,11 @@
  */
 
 import {
-  VISUAL,
-  PHYSICS,
   FLOW,
   getLaneX,
   getModelScale,
+  PHYSICS,
+  VISUAL,
 } from '../src/config/visual-constants';
 
 /**

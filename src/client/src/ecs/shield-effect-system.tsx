@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber';
-import { queries } from './world';
 import { useGameStore } from '../hooks/useGameStore';
+import { queries } from './world';
 
 export function ShieldEffectSystem() {
   const { status } = useGameStore();

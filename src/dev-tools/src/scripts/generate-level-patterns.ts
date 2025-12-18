@@ -4,13 +4,11 @@
  */
 
 import { generateText } from 'ai';
-import { CLAUDE_SONNET_4_5 } from '../config/ai-constants';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
+import { CLAUDE_SONNET_4_5 } from '../config/ai-constants';
 
 async function generateLevelPatterns() {
-  console.log('🗺️ Generating Level Patterns with Claude...');
-  
   const { text } = await generateText({
     model: CLAUDE_SONNET_4_5,
     prompt: `Design 15 challenging and varied obstacle patterns for "Otter River Rush", a 3-lane endless runner.
@@ -69,15 +67,12 @@ export const LEVEL_PATTERNS = [
       join(process.cwd(), 'src', 'game', 'data', 'level-patterns.ts'),
       tsCode
     );
-    console.log('✅ Level patterns generated and saved!');
-    console.log(`📝 ${tsCode.split('\n').length} lines of pattern data`);
   } else {
     // Save the whole response if no code block found
     writeFileSync(
       join(process.cwd(), 'src', 'game', 'data', 'level-patterns.ts'),
       text
     );
-    console.log('⚠️ Saved raw response - may need manual cleanup');
   }
 }
 

@@ -2,8 +2,8 @@
  * Test suite for asset-quality-evaluator functions
  */
 
-import { describe, it, expect } from 'vitest';
 import sharp from 'sharp';
+import { describe, expect, it } from 'vitest';
 
 /**
  * Check if image has any transparency

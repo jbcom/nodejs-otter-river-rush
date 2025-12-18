@@ -36,7 +36,6 @@ export function initAudio() {
   unlockAudio.unload();
 
   audioUnlocked = true;
-  console.log('🔊 Audio system unlocked');
 }
 
 /**
@@ -99,8 +98,6 @@ export function preloadSounds() {
   loadSound('collect-coin', getAudioPath('audio/sfx/collect-coin.ogg'), 0.7);
   loadSound('collect-gem', getAudioPath('audio/sfx/collect-gem.ogg'), 0.8);
   loadSound('hit', getAudioPath('audio/sfx/hit.ogg'), 0.9);
-
-  console.log('🎵 Sound effects preloaded');
 }
 
 /**

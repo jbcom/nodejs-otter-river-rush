@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 /**
  * Composition Tests - Verify visual layout and element positioning
@@ -17,7 +17,7 @@ test.describe('Visual Composition Tests', () => {
   }) => {
     // Wait for game to load
     await page.waitForSelector('#app', { timeout: 10000 });
-    
+
     // Start the game to render the canvas
     await page.click('#classicButton');
     await page.waitForTimeout(1000); // Wait for canvas to render
@@ -62,31 +62,29 @@ test.describe('Visual Composition Tests', () => {
 
     // No multiple overlapping canvases
     expect(layoutIssues.hasMultipleCanvases).toBe(false);
-
-    console.log(
-      '✅ Layout composition verified - no overlapping elements or white boxes'
-    );
   });
 
   test('canvas fills viewport correctly', async ({ page }) => {
     // Start the game first to render the canvas
     await page.click('#classicButton');
     await page.waitForSelector('canvas', { timeout: 10000 });
-    
+
     // Wait longer for the canvas to properly size
     await page.waitForTimeout(2000);
 
     const canvasLayout = await page.evaluate(() => {
       const canvases = document.querySelectorAll('canvas');
-      console.log('Found canvases:', canvases.length);
-      
+
       // Get the largest canvas (likely the Three.js canvas)
       const canvas = Array.from(canvases).reduce((largest, current) => {
         const currentRect = current.getBoundingClientRect();
         const largestRect = largest.getBoundingClientRect();
-        return (currentRect.width * currentRect.height) > (largestRect.width * largestRect.height) ? current : largest;
+        return currentRect.width * currentRect.height >
+          largestRect.width * largestRect.height
+          ? current
+          : largest;
       });
-      
+
       if (!canvas) return null;
 
       const rect = canvas.getBoundingClientRect();
@@ -107,21 +105,8 @@ test.describe('Visual Composition Tests', () => {
 
     expect(canvasLayout).not.toBeNull();
     expect(canvasLayout?.isVisible).toBe(true);
-    
-    // Debug logging
-    console.log('Canvas dimensions:', {
-      canvasWidth: canvasLayout?.canvasWidth,
-      canvasHeight: canvasLayout?.canvasHeight,
-      viewportWidth: canvasLayout?.viewportWidth,
-      viewportHeight: canvasLayout?.viewportHeight,
-      fillsViewport: canvasLayout?.fillsViewport,
-      widthRatio: canvasLayout ? canvasLayout.canvasWidth / canvasLayout.viewportWidth : 0,
-      heightRatio: canvasLayout ? canvasLayout.canvasHeight / canvasLayout.viewportHeight : 0,
-    });
-    
-    expect(canvasLayout?.fillsViewport).toBe(true);
 
-    console.log('✅ Canvas fills viewport correctly');
+    expect(canvasLayout?.fillsViewport).toBe(true);
   });
 
   test('UI elements have correct z-index stacking', async ({ page }) => {
@@ -159,8 +144,6 @@ test.describe('Visual Composition Tests', () => {
     });
 
     expect(zIndexIssues.hasIssues).toBe(false);
-
-    console.log('✅ Z-index stacking verified - UI elements properly layered');
   });
 
   test('no hidden or cropped content', async ({ page }) => {
@@ -195,8 +178,6 @@ test.describe('Visual Composition Tests', () => {
     });
 
     expect(croppedContent.croppedCount).toBe(0);
-
-    console.log('✅ All content visible - nothing hidden or cropped');
   });
 
   test('responsive layout - elements positioned correctly', async ({
@@ -226,10 +207,6 @@ test.describe('Visual Composition Tests', () => {
     expect(layoutPositioning.isValid).toBe(true);
     expect(layoutPositioning.appFullScreen).toBe(true);
     expect(layoutPositioning.noNegativePositions).toBe(true);
-
-    console.log(
-      '✅ Responsive layout verified - elements positioned correctly'
-    );
   });
 });
 
@@ -267,14 +244,6 @@ test.describe('Responsive Design Tests - Multiple Screen Sizes', () => {
           '#classicButton, #timeTrialButton, #zenButton, #dailyButton'
         );
         const title = document.querySelector('h1');
-        
-        // Debug: log the actual elements found
-        console.log('Elements found:', {
-          startScreen: !!startScreen,
-          menuContainer: !!menuContainer,
-          menuContainerClasses: menuContainer?.className,
-          menuContainerStyle: menuContainer ? window.getComputedStyle(menuContainer).position : 'none',
-        });
 
         if (!startScreen || !menuContainer || !title) {
           return { isValid: false, reason: 'Required elements not found' };
@@ -305,10 +274,11 @@ test.describe('Responsive Design Tests - Multiple Screen Sizes', () => {
         const centerOffset = Math.abs(
           containerRect.left + containerRect.width / 2 - viewportWidth / 2
         );
-        
+
         // More lenient centering tolerance for tablet viewports
-        const centeringTolerance = viewportWidth > 1000 ? 220 : viewportWidth > 600 ? 120 : 50;
-        
+        const centeringTolerance =
+          viewportWidth > 1000 ? 220 : viewportWidth > 600 ? 120 : 50;
+
         return {
           isValid: true,
           viewportWidth,
@@ -343,21 +313,8 @@ test.describe('Responsive Design Tests - Multiple Screen Sizes', () => {
       expect(responsiveCheck.containerFitsViewport).toBe(true);
       expect(responsiveCheck.noHorizontalScroll).toBe(true);
 
-      // Debug centering
-      console.log(`${viewport.name} centering debug:`, {
-        viewportWidth: responsiveCheck.viewportWidth,
-        containerWidth: responsiveCheck.containerWidth,
-        containerLeft: responsiveCheck.containerLeft,
-        containerCenter: responsiveCheck.containerCenter,
-        viewportCenter: responsiveCheck.viewportCenter,
-        centerOffset: responsiveCheck.centerOffset,
-        containerCentered: responsiveCheck.containerCentered,
-      });
-
       // Menu should be reasonably centered (within 50px of center)
       expect(responsiveCheck.containerCentered).toBe(true);
-
-      console.log(`✅ ${viewport.name}: Responsive layout verified`);
     });
   }
 
@@ -401,8 +358,6 @@ test.describe('Responsive Design Tests - Multiple Screen Sizes', () => {
     expect(landscapeCheck.containerWidth).toBeGreaterThan(0);
     expect(landscapeCheck.allButtonsVisible).toBe(true);
     expect(landscapeCheck.noOverflow).toBe(true);
-
-    console.log('✅ Orientation change handled correctly');
   });
 
   test('Very small screen (240x320) - content still accessible', async ({
@@ -431,7 +386,5 @@ test.describe('Responsive Design Tests - Multiple Screen Sizes', () => {
 
     // On very small screens, scrolling is acceptable
     expect(tinyScreenCheck.buttonsClickable).toBe(true);
-
-    console.log('✅ Very small screen handled - content remains accessible');
   });
 });

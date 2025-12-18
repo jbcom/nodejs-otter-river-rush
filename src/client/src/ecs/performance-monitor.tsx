@@ -1,5 +1,5 @@
 import { useFrame } from '@react-three/fiber';
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 
 export function PerformanceMonitor() {
   const [fps, setFps] = useState(60);

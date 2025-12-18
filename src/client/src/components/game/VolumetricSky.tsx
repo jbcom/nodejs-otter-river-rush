@@ -9,9 +9,9 @@
  * - Desktop: 60 FPS with 'high' preset
  */
 
-import React from 'react';
-import { CloudLayer, Clouds } from '@takram/three-clouds/r3f';
 import { Atmosphere } from '@takram/three-atmosphere/r3f';
+import { CloudLayer, Clouds } from '@takram/three-clouds/r3f';
+import React from 'react';
 import { useBiome } from '../../ecs/biome-system';
 import { useMobileConstraints } from '../../hooks/useMobileConstraints';
 

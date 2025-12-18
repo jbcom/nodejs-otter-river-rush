@@ -2,7 +2,7 @@
  * Meshy Retexture API
  * Retexturing existing models with AI-generated textures
  * https://docs.meshy.ai/en/api/retexture
- * 
+ *
  * Extends MeshyBaseClient for shared functionality
  */
 
@@ -12,21 +12,21 @@ export interface RetextureTaskParams {
   /**
    * Input - either input_task_id OR model_url (not both!)
    */
-  input_task_id?: string;            // Task ID from text-to-3d or previous task
-  model_url?: string;                // Publicly accessible GLB/FBX/OBJ URL or Data URI
+  input_task_id?: string; // Task ID from text-to-3d or previous task
+  model_url?: string; // Publicly accessible GLB/FBX/OBJ URL or Data URI
 
   /**
    * Style - either text_style_prompt OR image_style_url (not both!)
    */
-  text_style_prompt?: string;        // Text description (e.g., "green moss covering, wet appearance")
-  image_style_url?: string;          // Image URL or Data URI to guide texturing
-  
+  text_style_prompt?: string; // Text description (e.g., "green moss covering, wet appearance")
+  image_style_url?: string; // Image URL or Data URI to guide texturing
+
   /**
    * Advanced controls
    */
-  ai_model?: 'meshy-4' | 'meshy-5';  // Default: meshy-5
-  enable_original_uv?: boolean;      // Keep original UV mapping (default: true)
-  enable_pbr?: boolean;              // Generate PBR textures (default: false)
+  ai_model?: 'meshy-4' | 'meshy-5'; // Default: meshy-5
+  enable_original_uv?: boolean; // Keep original UV mapping (default: true)
+  enable_pbr?: boolean; // Generate PBR textures (default: false)
 }
 
 export interface RetextureTask {
@@ -54,7 +54,7 @@ export class RetextureAPI extends MeshyBaseClient {
   constructor(apiKey: string) {
     super(apiKey, 'https://api.meshy.ai/openapi/v1');
   }
-  
+
   /**
    * Create retexture task (aligned with actual API)
    * Generate new textures for existing model
@@ -67,9 +67,11 @@ export class RetextureAPI extends MeshyBaseClient {
     if (!params.input_task_id && !params.model_url) {
       throw new Error('Either input_task_id or model_url is required');
     }
-    
+
     if (!params.text_style_prompt && !params.image_style_url) {
-      throw new Error('Either text_style_prompt or image_style_url is required');
+      throw new Error(
+        'Either text_style_prompt or image_style_url is required'
+      );
     }
 
     const requestBody: any = {};
@@ -102,14 +104,14 @@ export class RetextureAPI extends MeshyBaseClient {
     const data = await makeRequestWithRetry(`${this.baseUrl}/retexture`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestBody),
     });
 
     const taskId = data.result || data.id;
-    
+
     if (!taskId) {
       throw new Error('No task ID returned from createRetextureTask');
     }
@@ -134,7 +136,11 @@ export class RetextureAPI extends MeshyBaseClient {
   /**
    * Poll retexture task until complete
    */
-  async pollRetextureTask(taskId: string, maxRetries = 60, intervalMs = 10000): Promise<RetextureTask> {
+  async pollRetextureTask(
+    taskId: string,
+    maxRetries = 60,
+    intervalMs = 10000
+  ): Promise<RetextureTask> {
     for (let i = 0; i < maxRetries; i++) {
       const task = await this.getRetextureTask(taskId);
 
@@ -144,10 +150,9 @@ export class RetextureAPI extends MeshyBaseClient {
       }
 
       if (task.progress !== undefined) {
-        console.log(`  🎨 Retexture ${taskId.substring(0, 12)}: ${task.progress}%`);
       }
 
-      await new Promise(resolve => setTimeout(resolve, intervalMs));
+      await new Promise((resolve) => setTimeout(resolve, intervalMs));
     }
 
     throw new Error(`Retexture task ${taskId} timed out`);
@@ -158,7 +163,7 @@ export class RetextureAPI extends MeshyBaseClient {
    */
   async deleteRetextureTask(taskId: string): Promise<void> {
     await this.request(`/retexture/${taskId}`, {
-      method: 'DELETE'
+      method: 'DELETE',
     });
   }
 

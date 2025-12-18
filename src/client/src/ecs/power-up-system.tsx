@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber';
-import { queries, world, spawn } from './world';
 import { useGameStore } from '../hooks/useGameStore';
+import { queries, spawn, world } from './world';
 
 export function PowerUpSystem() {
   const { status } = useGameStore();

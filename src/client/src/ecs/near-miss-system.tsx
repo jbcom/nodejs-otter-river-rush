@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber';
-import { queries, spawn } from './world';
 import { useGameStore } from '../hooks/useGameStore';
+import { queries, spawn } from './world';
 
 export function NearMissSystem() {
   const { status } = useGameStore();

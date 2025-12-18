@@ -1,34 +1,20 @@
-import { world, queries, type Entity } from '../ecs/world';
+import { type Entity, queries, world } from '../ecs/world';
 
 export const debugTools = {
   // Entity inspection
   logAllEntities() {
-    console.group('🔍 All Entities');
-    for (const entity of world) {
-      console.log(entity);
+    for (const _entity of world) {
     }
-    console.groupEnd();
   },
 
-  logEntityCounts() {
-    console.group('📊 Entity Counts');
-    console.log('Total:', world.entities.length);
-    console.log('Player:', queries.player.entities.length);
-    console.log('Obstacles:', queries.obstacles.entities.length);
-    console.log('Collectibles:', queries.collectibles.entities.length);
-    console.log('Particles:', queries.particles.entities.length);
-    console.log('Moving:', queries.moving.entities.length);
-    console.groupEnd();
-  },
+  logEntityCounts() {},
 
   logPlayer() {
-    const [player] = queries.player.entities;
-    console.log('🦦 Player:', player);
+    const [_player] = queries.player.entities;
   },
 
   clearAllEntities() {
     world.clear();
-    console.log('🧹 Cleared all entities');
   },
 
   spawnTestEntities() {
@@ -39,7 +25,6 @@ export const debugTools = {
     spawn.rock(2, 11, 2);
     spawn.coin(-2, 6);
     spawn.gem(2, 9);
-    console.log('✨ Spawned test entities');
   },
 
   freezeGame() {
@@ -50,7 +35,6 @@ export const debugTools = {
         entity.velocity.z = 0;
       }
     }
-    console.log('⏸️ Game frozen');
   },
 
   teleportPlayer(x: number, y: number) {
@@ -58,7 +42,6 @@ export const debugTools = {
     if (player) {
       player.position.x = x;
       player.position.y = y;
-      console.log(`📍 Player teleported to (${x}, ${y})`);
     }
   },
 
@@ -68,11 +51,9 @@ export const debugTools = {
       if (enable) {
         world.addComponent(player, 'invincible', true);
         world.addComponent(player, 'ghost', true);
-        console.log('🛡️ God mode ENABLED');
       } else {
         world.removeComponent(player, 'invincible');
         world.removeComponent(player, 'ghost');
-        console.log('⚔️ God mode DISABLED');
       }
     }
   },
@@ -81,7 +62,6 @@ export const debugTools = {
     const [player] = queries.player.entities;
     if (player && player.health !== undefined) {
       player.health = health;
-      console.log(`❤️ Health set to ${health}`);
     }
   },
 
@@ -89,7 +69,6 @@ export const debugTools = {
     const [player] = queries.player.entities;
     if (player && player.animation) {
       player.animation.current = animationName;
-      console.log(`🎬 Playing animation: ${animationName}`);
     }
   },
 
@@ -124,7 +103,6 @@ export const debugTools = {
         collectibles: queries.collectibles.entities.length,
       },
     };
-    console.log('📤 Game State:', state);
     return state;
   },
 };
@@ -132,5 +110,4 @@ export const debugTools = {
 // Expose to window for console access
 if (typeof window !== 'undefined') {
   (window as any).debug = debugTools;
-  console.log('🔧 Debug tools available at window.debug');
 }

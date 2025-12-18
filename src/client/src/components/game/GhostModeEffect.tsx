@@ -1,6 +1,6 @@
-import { queries } from '../../ecs/world';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { queries } from '../../ecs/world';
 
 export function GhostModeEffect(): null {
   useFrame(() => {

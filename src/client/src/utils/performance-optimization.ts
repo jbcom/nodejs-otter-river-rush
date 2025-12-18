@@ -113,13 +113,11 @@ export function debounce<T extends (...args: any[]) => any>(
 }
 
 export class FrameRateController {
-  private targetFPS: number;
   private interval: number;
   private lastTime: number = 0;
   private accumulator: number = 0;
 
   constructor(targetFPS: number = 60) {
-    this.targetFPS = targetFPS;
     this.interval = 1000 / targetFPS;
   }
 

@@ -6,10 +6,10 @@
 import { useFrame } from '@react-three/fiber';
 import { With } from 'miniplex';
 import { useRef } from 'react';
-import { PHYSICS, VISUAL, getLaneX } from '../config/visual-constants';
+import { getLaneX, PHYSICS, VISUAL } from '../config/visual-constants';
 import { useGameStore } from '../hooks/useGameStore';
 import { audio } from '../utils/audio';
-import { queries, spawn, world, type Entity } from './world';
+import { type Entity, queries, spawn, world } from './world';
 
 // Define queries at module level
 const movingEntities = queries.moving;

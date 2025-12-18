@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { queries } from './world';
 import { useGameStore } from '../hooks/useGameStore';
+import { queries } from './world';
 
 const ACHIEVEMENTS = {
   FIRST_COIN: {
@@ -148,6 +148,5 @@ export function AchievementSystem() {
 }
 
 function showAchievementPopup(name: string) {
-  console.log(`🏆 Achievement Unlocked: ${name}`);
   // TODO: Show visual popup
 }

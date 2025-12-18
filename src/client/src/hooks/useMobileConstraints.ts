@@ -51,7 +51,7 @@ const detectDeviceType = (): { isPhone: boolean; isTablet: boolean } => {
   const width = window.innerWidth;
   const height = window.innerHeight;
   const minDimension = Math.min(width, height);
-  const maxDimension = Math.max(width, height);
+  const _maxDimension = Math.max(width, height);
 
   // Tablet: min dimension >= 600px
   const isTablet = minDimension >= 600;
@@ -129,10 +129,7 @@ export function useMobileConstraints(): MobileConstraints {
         const lockTo = isPhone ? 'portrait' : 'landscape';
         (screen.orientation.lock as (orientation: string) => Promise<void>)(
           lockTo
-        ).catch(() => {
-          // Fallback: just update constraints
-          console.log(`Unable to lock orientation to ${lockTo}`);
-        });
+        ).catch(() => {});
       }
     };
 

@@ -9,9 +9,9 @@ import { MeshyBaseClient } from './base-client.js';
 import { MeshyBaseClient } from './base-client';
 
 export interface RiggingTaskParams {
-  input_task_id: string;  // Refine task ID
+  input_task_id: string; // Refine task ID
   height_meters?: number; // Character height (default 1.7m)
-  
+
   // Extended animation support
   custom_animations?: {
     idle?: boolean;
@@ -69,8 +69,12 @@ export class RiggingAPI extends MeshyBaseClient {
         input_task_id: params.input_task_id,
         height_meters: params.height_meters || 1.7,
         // Extended params (Meshy may or may not support all - graceful fallback)
-        ...(params.custom_animations && { custom_animations: params.custom_animations }),
-        ...(params.animation_style && { animation_style: params.animation_style }),
+        ...(params.custom_animations && {
+          custom_animations: params.custom_animations,
+        }),
+        ...(params.animation_style && {
+          animation_style: params.animation_style,
+        }),
         ...(params.fps && { fps: params.fps }),
       }),
     });
@@ -93,7 +97,11 @@ export class RiggingAPI extends MeshyBaseClient {
   /**
    * Poll rigging task until complete
    */
-  async pollRiggingTask(taskId: string, maxRetries = 60, intervalMs = 10000): Promise<RiggingTask> {
+  async pollRiggingTask(
+    taskId: string,
+    maxRetries = 60,
+    intervalMs = 10000
+  ): Promise<RiggingTask> {
     for (let i = 0; i < maxRetries; i++) {
       const task = await this.getRiggingTask(taskId);
 
@@ -103,10 +111,9 @@ export class RiggingAPI extends MeshyBaseClient {
       }
 
       if (task.progress !== undefined) {
-        console.log(`  ⏳ Rigging ${taskId.substring(0, 12)}: ${task.progress}%`);
       }
 
-      await new Promise(resolve => setTimeout(resolve, intervalMs));
+      await new Promise((resolve) => setTimeout(resolve, intervalMs));
     }
 
     throw new Error(`Rigging task ${taskId} timed out`);
@@ -119,13 +126,15 @@ export class RiggingAPI extends MeshyBaseClient {
     const response = await fetch(`${this.baseUrl}/rigging/${taskId}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
       },
     });
 
     if (!response.ok) {
       const error = await response.text();
-      throw new Error(`Failed to delete rigging task: ${response.status} - ${error}`);
+      throw new Error(
+        `Failed to delete rigging task: ${response.status} - ${error}`
+      );
     }
   }
 
@@ -140,7 +149,7 @@ export class RiggingAPI extends MeshyBaseClient {
       walking: task.result?.basic_animations?.walking_glb_url,
       running: task.result?.basic_animations?.running_glb_url,
     };
-    
+
     // Extract any additional animations from result
     if (task.result && typeof task.result === 'object') {
       for (const [key, value] of Object.entries(task.result)) {

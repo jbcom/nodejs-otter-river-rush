@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import React, { useRef } from 'react';
 import { Vector3 } from 'three';
 import { queries } from '../../ecs/world';
 import { useGameStore } from '../../hooks/useGameStore';

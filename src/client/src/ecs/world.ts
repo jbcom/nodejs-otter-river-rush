@@ -8,10 +8,10 @@ import createReactAPI from 'miniplex-react';
 import type { Object3D } from 'three';
 import { ASSET_URLS } from '../config/game-constants';
 import {
-  PHYSICS,
-  VISUAL,
   getLaneX,
   getModelScale,
+  PHYSICS,
+  VISUAL,
 } from '../config/visual-constants';
 import {
   getModelVariantsSync,

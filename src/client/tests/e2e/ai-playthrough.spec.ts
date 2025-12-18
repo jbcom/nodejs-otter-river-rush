@@ -20,8 +20,6 @@ test.describe('AI Player Persona - Autonomous Gameplay', () => {
     await page.click('#classicButton');
     await page.waitForTimeout(1000);
 
-    console.log('🤖 AI Persona activated - Goal-oriented gameplay starting...');
-
     // AI Persona Decision Loop (30 seconds)
     const playDuration = 30000;
     const decisionInterval = 100; // Make decisions every 100ms
@@ -47,7 +45,6 @@ test.describe('AI Player Persona - Autonomous Gameplay', () => {
 
       // If game over, break
       if (gameState.status !== 'playing') {
-        console.log('💀 AI Persona died - Game over');
         break;
       }
 
@@ -57,14 +54,10 @@ test.describe('AI Player Persona - Autonomous Gameplay', () => {
       // Execute decision
       if (decision.action === 'move_left') {
         await page.keyboard.press('ArrowLeft');
-        console.log('🎯 AI Decision: Move LEFT (avoiding obstacle)');
       } else if (decision.action === 'move_right') {
         await page.keyboard.press('ArrowRight');
-        console.log('🎯 AI Decision: Move RIGHT (avoiding obstacle)');
       } else if (decision.action === 'collect') {
-        console.log('💰 AI Decision: STAY (collecting item)');
       } else {
-        console.log('✅ AI Decision: STAY (safe path)');
       }
 
       await page.waitForTimeout(decisionInterval);
@@ -83,20 +76,9 @@ test.describe('AI Player Persona - Autonomous Gameplay', () => {
       };
     });
 
-    console.log('\n📊 AI Persona Final Stats:');
-    console.log(`   Distance: ${finalState.distance}m`);
-    console.log(`   Score: ${finalState.score}`);
-    console.log(`   Lives: ${finalState.lives}/3`);
-    console.log(`   Coins: ${finalState.coins}`);
-    console.log(`   Gems: ${finalState.gems}`);
-    console.log(`   Status: ${finalState.status}`);
-
     // Verify AI was able to play
     expect(finalState.distance).toBeGreaterThan(10); // Should survive at least 10m
     expect(finalState.score).toBeGreaterThan(0);
-
-    console.log('\n✅ AI Persona completed autonomous playthrough');
-    console.log('📹 Video recording saved for review');
   });
 });
 

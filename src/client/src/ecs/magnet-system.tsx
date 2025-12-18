@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber';
-import { queries, world } from './world';
 import { useGameStore } from '../hooks/useGameStore';
+import { queries, world } from './world';
 
 export function MagnetSystem() {
   const { status } = useGameStore();

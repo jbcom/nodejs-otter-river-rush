@@ -98,7 +98,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   startGame: (mode) => {
     // Reset the ECS world to clear all entities
     resetWorld();
-    
+
     set(() => ({
       status: 'playing',
       mode,
@@ -128,7 +128,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   returnToMenu: () => {
     // Reset the ECS world to clear all entities
     resetWorld();
-    
+
     set({
       status: 'menu',
       score: 0,

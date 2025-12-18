@@ -1,11 +1,12 @@
 #!/usr/bin/env node
+
 /**
  * Icon Post-Processor - Resizes and converts generated icons to proper formats
  */
 
-import sharp from 'sharp';
-import { readFileSync, writeFileSync, existsSync, unlinkSync } from 'fs';
+import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import sharp from 'sharp';
 
 const PUBLIC_DIR = join(process.cwd(), 'public');
 
@@ -69,7 +70,6 @@ async function resizeIcon(task: IconTask): Promise<void> {
   const outputPath = join(PUBLIC_DIR, task.output);
 
   if (!existsSync(sourcePath)) {
-    console.log(`   ⚠️  Source not found: ${task.source}`);
     return;
   }
 
@@ -85,27 +85,20 @@ async function resizeIcon(task: IconTask): Promise<void> {
 
     writeFileSync(outputPath, buffer);
 
-    const stats = await sharp(buffer).metadata();
-
-    console.log(
-      `   ✅ ${task.output}: ${stats.width}x${stats.height} (${Math.round(buffer.length / 1024)}KB)`
-    );
+    const _stats = await sharp(buffer).metadata();
   } catch (error) {
     console.error(`   ❌ Failed to process ${task.source}:`, error);
   }
 }
 
 async function createFaviconICO(): Promise<void> {
-  console.log('\n🎨 Creating favicon.ico...');
-
-  const sizes = [16, 32, 48];
-  const tempFiles: string[] = [];
+  const _sizes = [16, 32, 48];
+  const _tempFiles: string[] = [];
 
   try {
     // Check if we have the favicon source
     const faviconSource = join(PUBLIC_DIR, 'favicon-temp.png');
     if (!existsSync(faviconSource)) {
-      console.log('   ⚠️  favicon-temp.png not found, skipping ICO creation');
       return;
     }
 
@@ -118,18 +111,19 @@ async function createFaviconICO(): Promise<void> {
       // Copy 32x32 as .ico (browsers will accept it)
       const buffer = readFileSync(favicon32);
       writeFileSync(faviconOutput, buffer);
-      console.log(`   ✅ favicon.ico created (${Math.round(buffer.length / 1024)}KB)`);
 
       // Clean up temp files
-      ['favicon-16.png', 'favicon-32.png', 'favicon-48.png', 'favicon-temp.png'].forEach(
-        file => {
-          const path = join(PUBLIC_DIR, file);
-          if (existsSync(path)) {
-            unlinkSync(path);
-          }
+      [
+        'favicon-16.png',
+        'favicon-32.png',
+        'favicon-48.png',
+        'favicon-temp.png',
+      ].forEach((file) => {
+        const path = join(PUBLIC_DIR, file);
+        if (existsSync(path)) {
+          unlinkSync(path);
         }
-      );
-      console.log('   🧹 Cleaned up temporary files');
+      });
     }
   } catch (error) {
     console.error('   ❌ Failed to create favicon.ico:', error);
@@ -137,8 +131,6 @@ async function createFaviconICO(): Promise<void> {
 }
 
 async function optimizeExistingImages(): Promise<void> {
-  console.log('\n🔧 Optimizing existing large images...');
-
   const imagesToOptimize = [
     // HUD images
     'hud/splash-screen.png',
@@ -204,12 +196,11 @@ async function optimizeExistingImages(): Promise<void> {
       writeFileSync(fullPath, buffer);
 
       const newSize = buffer.length;
-      const savings = Math.round(((originalSize - newSize) / originalSize) * 100);
+      const savings = Math.round(
+        ((originalSize - newSize) / originalSize) * 100
+      );
 
       if (savings > 5) {
-        console.log(
-          `   ✅ ${imagePath}: ${Math.round(originalSize / 1024)}KB → ${Math.round(newSize / 1024)}KB (${savings}% smaller)`
-        );
       }
     } catch (error) {
       console.error(`   ❌ Failed to optimize ${imagePath}:`, error);
@@ -218,10 +209,6 @@ async function optimizeExistingImages(): Promise<void> {
 }
 
 async function main() {
-  console.log('🚀 Processing and Optimizing Icons...\n');
-
-  // Step 1: Resize PWA icons to correct dimensions
-  console.log('📐 Resizing icons to correct dimensions...');
   for (const task of ICON_TASKS) {
     await resizeIcon(task);
   }
@@ -231,12 +218,6 @@ async function main() {
 
   // Step 3: Optimize all existing images
   await optimizeExistingImages();
-
-  console.log('\n✨ Icon processing complete!');
-  console.log('\n📊 Summary:');
-  console.log('   - PWA icons resized to proper dimensions');
-  console.log('   - Favicon converted to .ico format');
-  console.log('   - All images optimized for web');
 }
 
 main().catch(console.error);
