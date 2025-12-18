@@ -94,8 +94,15 @@ async function generateAnimation(
  */
 async function main() {
   // Load manifest to get rig_task_id
+  interface ManifestModel {
+    id: string;
+    source: { rigTaskId?: string };
+    animations?: Array<{ url: string }>;
+  }
   const manifest = await fs.readJson(MANIFEST_PATH);
-  const otterModel = manifest.models.find((m: any) => m.id === 'otter-rusty');
+  const otterModel = (manifest.models as ManifestModel[]).find(
+    (m) => m.id === 'otter-rusty'
+  );
 
   if (!otterModel) {
     console.error(chalk.red('❌ Otter model not found in manifest!'));

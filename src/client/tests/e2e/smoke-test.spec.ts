@@ -25,13 +25,12 @@ test.describe('Critical Smoke Test - Real User Flow', () => {
     });
     expect(hasContent).toBe(true);
 
-    // Check menu is visible
-    const menuVisible = await page.locator('#startScreen').isVisible();
-    expect(menuVisible).toBe(true);
+    // Check menu is visible (wait for it to appear)
+    const startScreen = page.locator('#startScreen');
+    await expect(startScreen).toBeVisible({ timeout: 10000 });
 
     // Check menu has text content
-    const menuText = await page.locator('#startScreen').textContent();
-    expect(menuText).toContain('Otter River Rush');
+    await expect(startScreen).toContainText('Otter River Rush');
 
     // CRITICAL: Actually click the button (don't bypass with evaluate)
     const classicButton = page.locator('#classicButton');
@@ -44,8 +43,7 @@ test.describe('Critical Smoke Test - Real User Flow', () => {
     await page.waitForTimeout(1000);
 
     // Check game started (menu should hide)
-    const menuHidden = await page.locator('#startScreen').isHidden();
-    expect(menuHidden).toBe(true);
+    await expect(startScreen).toBeHidden({ timeout: 5000 });
 
     // CRITICAL: Check R3F canvas exists
     const canvas = page.locator('canvas');

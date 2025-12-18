@@ -81,10 +81,13 @@ export class AnimationsAPI extends MeshyBaseClient {
   async createAnimationTask(
     params: AnimationTaskParams
   ): Promise<AnimationTask> {
-    const data = await this.request<any>('/animations', {
-      method: 'POST',
-      body: JSON.stringify(params),
-    });
+    const data = await this.request<{ result?: string; id?: string }>(
+      '/animations',
+      {
+        method: 'POST',
+        body: JSON.stringify(params),
+      }
+    );
 
     return {
       id: data.result || data.id,
