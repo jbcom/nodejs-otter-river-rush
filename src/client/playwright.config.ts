@@ -33,7 +33,19 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        // Enable GPU for WebGL rendering in CI
+        launchOptions: {
+          args: [
+            '--enable-webgl',
+            '--use-gl=swiftshader',
+            '--enable-accelerated-2d-canvas',
+            '--disable-gpu-sandbox',
+            '--no-sandbox',
+          ],
+        },
+      },
     },
     {
       name: 'chromium-video',
