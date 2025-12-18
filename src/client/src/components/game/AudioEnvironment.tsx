@@ -12,6 +12,7 @@ import {
 } from '@jbcom/strata';
 import { useBiome } from '../../ecs/biome-system';
 import { useGameStore } from '../../hooks/useGameStore';
+import { getBiomeConfig } from '../../config/biome-config';
 
 interface AudioEnvironmentProps {
   children: React.ReactNode;
@@ -27,17 +28,12 @@ export function AudioEnvironment({
   const { status } = useGameStore();
   const biome = useBiome();
 
-  // Biome-specific ambient sounds
-  const biomeAmbient: Record<string, string> = {
-    'Forest Stream': 'forest',
-    'Mountain Rapids': 'mountain',
-    'Canyon River': 'desert',
-    'Crystal Falls': 'waterfall',
-  };
-
-  const ambientType = biomeAmbient[biome.name] || 'forest';
+  // Get biome config from centralized config
+  const biomeConfig = getBiomeConfig(biome.name);
+  const ambientType = biomeConfig.ambientType;
   const isPlaying = status === 'playing';
-  const isRapids = biome.name === 'Mountain Rapids';
+  const hasRain = biomeConfig.hasRain;
+  const rainIntensity = biomeConfig.rainIntensity;
 
   return (
     <AudioProvider>
@@ -53,14 +49,14 @@ export function AudioEnvironment({
         />
       )}
 
-      {/* Weather audio for rapids biome */}
-      {isPlaying && isRapids && (
+      {/* Weather audio based on biome config */}
+      {isPlaying && hasRain && (
         <WeatherAudio
           rainUrl="/audio/sfx/rain-loop.ogg"
           windUrl="/audio/sfx/wind-loop.ogg"
           thunderUrl="/audio/sfx/thunder.ogg"
-          rainIntensity={0.6}
-          windIntensity={0.4}
+          rainIntensity={rainIntensity}
+          windIntensity={rainIntensity * 0.6}
           thunderActive={false}
         />
       )}

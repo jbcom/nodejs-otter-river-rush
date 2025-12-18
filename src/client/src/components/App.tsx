@@ -4,13 +4,15 @@ import { MainMenu } from './ui/MainMenu';
 import { GameHUD } from './ui/GameHUD';
 import { GameOver } from './ui/GameOver';
 import { useGameStore } from '../hooks/useGameStore';
+import { useGameSettings } from '../contexts/GameSettingsContext';
 
 export function App(): React.JSX.Element {
   const { status } = useGameStore();
+  const { showStats } = useGameSettings();
 
   return (
     <div className="fixed inset-0 w-screen h-screen">
-      {status !== 'menu' && <GameCanvas showStats={import.meta.env.DEV} />}
+      {status !== 'menu' && <GameCanvas showStats={showStats} />}
 
       {status === 'menu' && <MainMenu />}
       {status === 'playing' && <GameHUD />}

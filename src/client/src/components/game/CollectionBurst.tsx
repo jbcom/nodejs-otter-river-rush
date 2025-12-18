@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { ParticleBurst } from '@jbcom/strata';
 import { queries } from '../../ecs/world';
 
@@ -15,6 +15,16 @@ interface Burst {
 export function CollectionBurst(): React.JSX.Element {
   const [bursts, setBursts] = useState<Burst[]>([]);
   const nextIdRef = useRef(0);
+  const timeoutIdsRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
+
+  // Cleanup function for removing a burst after animation
+  const removeBurstAfterDelay = useCallback((burstId: number) => {
+    const timeoutId = setTimeout(() => {
+      setBursts((prev) => prev.filter((b) => b.id !== burstId));
+      timeoutIdsRef.current.delete(timeoutId);
+    }, 1500);
+    timeoutIdsRef.current.add(timeoutId);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = queries.collected.onEntityAdded.subscribe((entity) => {
@@ -28,16 +38,17 @@ export function CollectionBurst(): React.JSX.Element {
         };
 
         setBursts((prev) => [...prev, burst]);
-
-        // Remove after animation completes
-        window.setTimeout(() => {
-          setBursts((prev) => prev.filter((b) => b.id !== burst.id));
-        }, 1500);
+        removeBurstAfterDelay(burst.id);
       }
     });
 
-    return unsubscribe;
-  }, []);
+    // Cleanup: clear all pending timeouts on unmount
+    return () => {
+      unsubscribe();
+      timeoutIdsRef.current.forEach((id) => clearTimeout(id));
+      timeoutIdsRef.current.clear();
+    };
+  }, [removeBurstAfterDelay]);
 
   return (
     <group>

@@ -16,6 +16,7 @@ import {
 } from '@jbcom/strata';
 import { useBiome } from '../../ecs/biome-system';
 import { useMobileConstraints } from '../../hooks/useMobileConstraints';
+import { getBiomeConfig } from '../../config/biome-config';
 
 interface VolumetricSkyProps {
   timeOfDay?: number; // 0-24 (for future day/night cycle)
@@ -29,15 +30,9 @@ export function VolumetricSky({
   const constraints = useMobileConstraints();
   const biome = useBiome();
 
-  // Adjust coverage by biome
-  const biomeCoverage: Record<string, number> = {
-    forest: 0.3, // Light clouds
-    mountain: 0.5, // More dramatic clouds
-    canyon: 0.2, // Clear desert sky
-    rapids: 0.6, // Stormy clouds
-  };
-
-  const finalCoverage = biomeCoverage[biome.name] || coverage;
+  // Get biome config from centralized config
+  const biomeConfig = getBiomeConfig(biome.name);
+  const finalCoverage = biomeConfig.cloudCoverage || coverage;
 
   // Reduce quality on mobile for performance
   const cloudSteps = constraints.isPhone ? 16 : constraints.isTablet ? 32 : 64;

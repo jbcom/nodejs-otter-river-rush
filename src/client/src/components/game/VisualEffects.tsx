@@ -3,6 +3,7 @@ import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { CloudSky, EnhancedFog } from '@jbcom/strata';
 import { useGameStore } from '../../hooks/useGameStore';
 import { useBiome } from '../../ecs/biome-system';
+import { getBiomeConfig } from '../../config/biome-config';
 
 /**
  * Visual Effects using @jbcom/strata
@@ -12,14 +13,9 @@ export function VisualEffects(): React.JSX.Element {
   const { status } = useGameStore();
   const biome = useBiome();
 
-  // Biome-specific cloud coverage
-  const biomeCoverage: Record<string, number> = {
-    'Forest Stream': 0.3,
-    'Mountain Rapids': 0.5,
-    'Canyon River': 0.2,
-    'Crystal Falls': 0.6,
-  };
-  const coverage = biomeCoverage[biome.name] || 0.4;
+  // Get biome config from centralized config
+  const biomeConfig = getBiomeConfig(biome.name);
+  const coverage = biomeConfig.cloudCoverage;
 
   return (
     <>

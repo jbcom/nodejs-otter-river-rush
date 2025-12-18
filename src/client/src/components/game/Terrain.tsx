@@ -8,6 +8,7 @@ import React, { Suspense } from 'react';
 import { GrassInstances, RockInstances } from '@jbcom/strata';
 import { useBiome } from '../../ecs/biome-system';
 import { useMobileConstraints } from '../../hooks/useMobileConstraints';
+import { getBiomeConfig } from '../../config/biome-config';
 
 /**
  * Simple heightmap function for terrain
@@ -29,6 +30,9 @@ function TerrainMesh(): React.JSX.Element {
   const biome = useBiome();
   const constraints = useMobileConstraints();
 
+  // Get biome config from centralized config
+  const biomeConfig = getBiomeConfig(biome.name);
+
   // Reduce vegetation density on mobile
   const grassCount = constraints.isPhone
     ? 500
@@ -37,14 +41,9 @@ function TerrainMesh(): React.JSX.Element {
       : 2000;
   const rockCount = constraints.isPhone ? 20 : constraints.isTablet ? 40 : 80;
 
-  // Biome-specific colors
-  const biomeColors: Record<string, string> = {
-    'Forest Stream': '#3d6b35',
-    'Mountain Rapids': '#5a6b5a',
-    'Canyon River': '#8b7355',
-    'Crystal Falls': '#4a9c6e',
-  };
-  const grassColor = biomeColors[biome.name] || '#4a7c4e';
+  // Use centralized biome colors
+  const grassColor = biomeConfig.grassColor;
+  const groundColor = biomeConfig.groundColor;
 
   return (
     <group>
@@ -56,7 +55,7 @@ function TerrainMesh(): React.JSX.Element {
       >
         <planeGeometry args={[40, 40, 32, 32]} />
         <meshStandardMaterial
-          color={biome.fogColor || '#4a7c4e'}
+          color={groundColor}
           roughness={0.9}
           metalness={0}
         />

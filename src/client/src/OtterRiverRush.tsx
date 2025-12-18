@@ -20,8 +20,9 @@
  * ```
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { App } from './components/App';
+import { GameSettingsProvider } from './contexts/GameSettingsContext';
 import { useGameStore } from './hooks/useGameStore';
 import { audio } from './utils/audio';
 import './style.css';
@@ -53,10 +54,12 @@ export function OtterRiverRush({
   height = '100vh',
   onGameOver,
   onScoreChange,
-  showStats: _showStats = false,
+  showStats = false,
   volume = 0.7,
   className = '',
 }: OtterRiverRushProps): React.JSX.Element {
+  // Memoize settings to avoid unnecessary re-renders
+  const gameSettings = useMemo(() => ({ showStats }), [showStats]);
   // Initialize audio on mount
   useEffect(() => {
     audio.preload();
@@ -88,13 +91,15 @@ export function OtterRiverRush({
   };
 
   return (
-    <div
-      className={`otter-river-rush-container ${className}`}
-      style={containerStyle}
-      onClick={() => audio.init()}
-    >
-      <App />
-    </div>
+    <GameSettingsProvider settings={gameSettings}>
+      <div
+        className={`otter-river-rush-container ${className}`}
+        style={containerStyle}
+        onClick={() => audio.init()}
+      >
+        <App />
+      </div>
+    </GameSettingsProvider>
   );
 }
 

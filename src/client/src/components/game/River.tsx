@@ -2,6 +2,7 @@ import React from 'react';
 import { Water } from '@jbcom/strata';
 import { useGameStore } from '../../hooks/useGameStore';
 import { useBiome } from '../../ecs/biome-system';
+import { getBiomeConfig } from '../../config/biome-config';
 
 /**
  * River Component using @jbcom/strata Water
@@ -11,15 +12,9 @@ export function River(): React.JSX.Element {
   const { status } = useGameStore();
   const biome = useBiome();
 
-  // Biome-specific water colors
-  const biomeWaterColors: Record<string, string> = {
-    'Forest Stream': '#1e5a8a',
-    'Mountain Rapids': '#2a6a9a',
-    'Canyon River': '#3a7aaa',
-    'Crystal Falls': '#1ecfcf',
-  };
-
-  const waterColor = biomeWaterColors[biome.name] || '#1e40af';
+  // Get biome config from centralized config
+  const biomeConfig = getBiomeConfig(biome.name);
+  const waterColor = biomeConfig.waterColor;
 
   // Wave speed based on game state
   const waveSpeed = status === 'playing' ? 1.0 : 0.3;

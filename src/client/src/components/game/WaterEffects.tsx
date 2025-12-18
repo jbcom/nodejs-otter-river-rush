@@ -2,6 +2,7 @@ import React from 'react';
 import { AdvancedWater, Rain } from '@jbcom/strata';
 import { useBiome } from '../../ecs/biome-system';
 import { useGameStore } from '../../hooks/useGameStore';
+import { getBiomeConfig } from '../../config/biome-config';
 
 /**
  * Water Effects using @jbcom/strata AdvancedWater
@@ -11,18 +12,11 @@ export function WaterEffects(): React.JSX.Element | null {
   const { status } = useGameStore();
   const biome = useBiome();
 
-  // Biome-specific water colors
-  const waterColors: Record<string, string> = {
-    'Forest Stream': '#1a4a6e',
-    'Mountain Rapids': '#2668a0',
-    'Canyon River': '#3a5a6e',
-    'Crystal Falls': '#1a8a8a',
-  };
-
-  const waterColor = waterColors[biome.name] || '#1e40af';
-
-  // Show rain in rapids biome
-  const showRain = biome.name === 'Mountain Rapids';
+  // Get biome config from centralized config
+  const biomeConfig = getBiomeConfig(biome.name);
+  const waterColor = biomeConfig.deepWaterColor;
+  const showRain = biomeConfig.hasRain;
+  const rainIntensity = biomeConfig.rainIntensity;
 
   // Wave speed based on game state
   const waveSpeed = status === 'playing' ? 1.5 : 0.5;
@@ -39,13 +33,13 @@ export function WaterEffects(): React.JSX.Element | null {
         causticIntensity={0.3}
       />
 
-      {/* Weather effects for rapids biome */}
+      {/* Weather effects based on biome config */}
       {showRain && (
         <Rain
           count={500}
           areaSize={40}
           height={20}
-          intensity={0.6}
+          intensity={rainIntensity}
           dropLength={0.5}
         />
       )}
