@@ -22,7 +22,7 @@ export class StorageManager {
     const result = { ...target } as SaveData;
 
     for (const key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
+      if (Object.hasOwn(source, key)) {
         const sourceValue = source[key as keyof SaveData];
         const targetValue = result[key as keyof SaveData];
 
@@ -36,13 +36,13 @@ export class StorageManager {
           !Array.isArray(targetValue)
         ) {
           // Merge nested objects
-          (result as any)[key] = {
-            ...(targetValue as any),
-            ...(sourceValue as any),
+          (result as unknown as Record<string, unknown>)[key] = {
+            ...(targetValue as Record<string, unknown>),
+            ...(sourceValue as Record<string, unknown>),
           };
         } else if (sourceValue !== undefined) {
           // Otherwise, overwrite with source value
-          (result as any)[key] = sourceValue;
+          (result as unknown as Record<string, unknown>)[key] = sourceValue;
         }
       }
     }

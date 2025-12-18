@@ -1,5 +1,3 @@
-import type { Entity } from '../ecs/world';
-
 export class ObjectPool<T> {
   private available: T[] = [];
   private inUse = new Set<T>();
@@ -55,17 +53,17 @@ export class ObjectPool<T> {
   }
 }
 
-export class BatchRenderer {
-  private batches: Map<string, any[]> = new Map();
+export class BatchRenderer<T = unknown> {
+  private batches: Map<string, T[]> = new Map();
 
-  add(key: string, item: any): void {
+  add(key: string, item: T): void {
     if (!this.batches.has(key)) {
       this.batches.set(key, []);
     }
     this.batches.get(key)!.push(item);
   }
 
-  get(key: string): any[] {
+  get(key: string): T[] {
     return this.batches.get(key) || [];
   }
 
@@ -73,14 +71,14 @@ export class BatchRenderer {
     this.batches.clear();
   }
 
-  forEach(callback: (key: string, items: any[]) => void): void {
+  forEach(callback: (key: string, items: T[]) => void): void {
     for (const [key, items] of this.batches) {
       callback(key, items);
     }
   }
 }
 
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   delay: number
 ): (...args: Parameters<T>) => void {
@@ -95,7 +93,7 @@ export function throttle<T extends (...args: any[]) => any>(
   };
 }
 
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   delay: number
 ): (...args: Parameters<T>) => void {
@@ -113,13 +111,11 @@ export function debounce<T extends (...args: any[]) => any>(
 }
 
 export class FrameRateController {
-  private targetFPS: number;
   private interval: number;
   private lastTime: number = 0;
   private accumulator: number = 0;
 
   constructor(targetFPS: number = 60) {
-    this.targetFPS = targetFPS;
     this.interval = 1000 / targetFPS;
   }
 
@@ -159,13 +155,18 @@ export function createMemoizedGetter<T>(
   };
 }
 
-export class QuadTree {
+export interface QuadTreeEntity {
+  position: { x: number; y: number };
+  collider: { width: number; height: number };
+}
+
+export class QuadTree<T extends QuadTreeEntity = QuadTreeEntity> {
   private maxObjects: number = 10;
   private maxLevels: number = 5;
   private level: number;
   private bounds: { x: number; y: number; width: number; height: number };
-  private objects: any[] = [];
-  private nodes: QuadTree[] = [];
+  private objects: T[] = [];
+  private nodes: QuadTree<T>[] = [];
 
   constructor(
     level: number,
@@ -189,28 +190,28 @@ export class QuadTree {
     const x = this.bounds.x;
     const y = this.bounds.y;
 
-    this.nodes[0] = new QuadTree(this.level + 1, {
+    this.nodes[0] = new QuadTree<T>(this.level + 1, {
       x: x + subWidth,
       y: y,
       width: subWidth,
       height: subHeight,
     });
 
-    this.nodes[1] = new QuadTree(this.level + 1, {
+    this.nodes[1] = new QuadTree<T>(this.level + 1, {
       x: x,
       y: y,
       width: subWidth,
       height: subHeight,
     });
 
-    this.nodes[2] = new QuadTree(this.level + 1, {
+    this.nodes[2] = new QuadTree<T>(this.level + 1, {
       x: x,
       y: y + subHeight,
       width: subWidth,
       height: subHeight,
     });
 
-    this.nodes[3] = new QuadTree(this.level + 1, {
+    this.nodes[3] = new QuadTree<T>(this.level + 1, {
       x: x + subWidth,
       y: y + subHeight,
       width: subWidth,
@@ -218,10 +219,7 @@ export class QuadTree {
     });
   }
 
-  getIndex(entity: {
-    position: { x: number; y: number };
-    collider: { width: number; height: number };
-  }): number {
+  getIndex(entity: T): number {
     let index = -1;
     const verticalMidpoint = this.bounds.x + this.bounds.width / 2;
     const horizontalMidpoint = this.bounds.y + this.bounds.height / 2;
@@ -251,7 +249,7 @@ export class QuadTree {
     return index;
   }
 
-  insert(entity: any): void {
+  insert(entity: T): void {
     if (this.nodes.length > 0) {
       const index = this.getIndex(entity);
 
@@ -280,9 +278,9 @@ export class QuadTree {
     }
   }
 
-  retrieve(entity: any): any[] {
+  retrieve(entity: T): T[] {
     const index = this.getIndex(entity);
-    let returnObjects = this.objects;
+    let returnObjects = [...this.objects];
 
     if (this.nodes.length > 0) {
       if (index !== -1) {

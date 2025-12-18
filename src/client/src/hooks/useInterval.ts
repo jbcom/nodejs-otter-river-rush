@@ -57,7 +57,7 @@ export function useDebounce<T>(value: T, delay: number): T {
  * @example
  * const throttledScroll = useThrottle(handleScroll, 100);
  */
-export function useThrottle<T extends (...args: any[]) => any>(
+export function useThrottle<T extends (...args: unknown[]) => unknown>(
   callback: T,
   delay: number
 ): T {

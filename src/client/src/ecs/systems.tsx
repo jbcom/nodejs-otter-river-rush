@@ -6,10 +6,10 @@
 import { useFrame } from '@react-three/fiber';
 import { With } from 'miniplex';
 import { useRef } from 'react';
-import { PHYSICS, VISUAL, getLaneX } from '../config/visual-constants';
+import { getLaneX, PHYSICS, VISUAL } from '../config/visual-constants';
 import { useGameStore } from '../hooks/useGameStore';
 import { audio } from '../utils/audio';
-import { queries, spawn, world, type Entity } from './world';
+import { type Entity, queries, spawn, world } from './world';
 
 // Define queries at module level
 const movingEntities = queries.moving;
@@ -81,26 +81,53 @@ export function CollisionSystem() {
 
     // Check obstacle collisions
     for (const obstacle of obstacleEntities) {
-      if (checkCollision(player as any, obstacle)) {
-        handleObstacleHit(player, obstacle);
+      if (player.collider && obstacle.collider) {
+        const playerWithCollider = player as With<
+          Entity,
+          'position' | 'collider'
+        >;
+        const obstacleWithCollider = obstacle as With<
+          Entity,
+          'position' | 'collider'
+        >;
+        if (checkCollision(playerWithCollider, obstacleWithCollider)) {
+          handleObstacleHit(player, obstacle);
+        }
       }
     }
 
     // Check enemy collisions
     const enemies = queries.enemies || [];
     for (const enemy of enemies) {
-      if (enemy.collider && checkCollision(player as any, enemy as any)) {
-        handleEnemyHit(player, enemy);
+      if (player.collider && enemy.collider) {
+        const playerWithCollider = player as With<
+          Entity,
+          'position' | 'collider'
+        >;
+        const enemyWithCollider = enemy as With<
+          Entity,
+          'position' | 'collider'
+        >;
+        if (checkCollision(playerWithCollider, enemyWithCollider)) {
+          handleEnemyHit(player, enemy);
+        }
       }
     }
 
     // Check collectible collisions
     for (const collectible of collectibleEntities) {
-      if (
-        collectible.collider &&
-        checkCollision(player as any, collectible as any)
-      ) {
-        handleCollect(player, collectible);
+      if (player.collider && collectible.collider) {
+        const playerWithCollider = player as With<
+          Entity,
+          'position' | 'collider'
+        >;
+        const collectibleWithCollider = collectible as With<
+          Entity,
+          'position' | 'collider'
+        >;
+        if (checkCollision(playerWithCollider, collectibleWithCollider)) {
+          handleCollect(player, collectible);
+        }
       }
     }
   });
@@ -358,8 +385,8 @@ export function GameSystems() {
 
 // Add camera shake on collision
 function triggerCameraShake(intensity: number = 0.2) {
-  if ((window as any).__cameraShake) {
-    (window as any).__cameraShake(intensity);
+  if (window.__cameraShake) {
+    window.__cameraShake(intensity);
   }
 }
 

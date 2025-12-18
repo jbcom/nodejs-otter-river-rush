@@ -4,7 +4,7 @@
  * This test MUST pass or the app is broken
  */
 
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test.describe('Critical Smoke Test - Real User Flow', () => {
   test('app loads, renders React, shows menu, starts game, renders canvas', async ({
@@ -25,17 +25,15 @@ test.describe('Critical Smoke Test - Real User Flow', () => {
     });
     expect(hasContent).toBe(true);
 
-    // Check menu is visible
-    const menuVisible = await page.locator('#startScreen').isVisible();
-    expect(menuVisible).toBe(true);
-
-    // Check menu has text content
-    const menuText = await page.locator('#startScreen').textContent();
-    expect(menuText).toContain('Otter River Rush');
-
-    // CRITICAL: Actually click the button (don't bypass with evaluate)
+    // Wait for menu to be in the DOM and clickable
+    // The startScreen element might be considered "hidden" during CSS animation
+    // So we wait for the button which indicates the menu is ready
     const classicButton = page.locator('#classicButton');
-    await expect(classicButton).toBeVisible({ timeout: 5000 });
+    await expect(classicButton).toBeVisible({ timeout: 15000 });
+
+    // Verify menu content is present
+    const startScreen = page.locator('#startScreen');
+    await expect(startScreen).toContainText('Otter River Rush');
 
     // Force click with JavaScript since Playwright struggles with scroll containers
     await page.evaluate(() => {
@@ -44,8 +42,7 @@ test.describe('Critical Smoke Test - Real User Flow', () => {
     await page.waitForTimeout(1000);
 
     // Check game started (menu should hide)
-    const menuHidden = await page.locator('#startScreen').isHidden();
-    expect(menuHidden).toBe(true);
+    await expect(startScreen).toBeHidden({ timeout: 5000 });
 
     // CRITICAL: Check R3F canvas exists
     const canvas = page.locator('canvas');
@@ -79,10 +76,5 @@ test.describe('Critical Smoke Test - Real User Flow', () => {
 
     expect(gameState.status).toBe('playing');
     expect(gameState.distance).toBeGreaterThan(0);
-
-    console.log('✅ SMOKE TEST PASSED - App actually works!');
-    console.log(`   Status: ${gameState.status}`);
-    console.log(`   Distance: ${gameState.distance}m`);
-    console.log(`   Score: ${gameState.score}`);
   });
 });

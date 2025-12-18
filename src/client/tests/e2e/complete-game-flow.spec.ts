@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 /**
  * Compositional Flow Tests - Verify COMPLETE game sequences work end-to-end
@@ -116,10 +116,6 @@ test.describe('Complete Game Flow - Full Playthrough', () => {
     );
     expect(finalStatus).toBe('menu');
     await expect(page.locator('#startScreen')).toBeVisible({ timeout: 10000 });
-
-    console.log(
-      '✅ Complete game loop verified: Menu → Play → Die → Restart → Menu'
-    );
   });
 
   test('Pause/Resume Flow: Play → Pause → Resume → Continue', async ({
@@ -175,8 +171,6 @@ test.describe('Complete Game Flow - Full Playthrough', () => {
       );
       expect(distanceAfter).toBeGreaterThan(distanceBefore);
     }).toPass({ timeout: 10000, intervals: [500] }); // Poll for up to 10 seconds, check every 500ms
-
-    console.log('✅ Pause/Resume flow verified');
   });
 
   test('Collision & Scoring Flow: Dodge obstacles, collect items, score increases', async ({
@@ -218,7 +212,5 @@ test.describe('Complete Game Flow - Full Playthrough', () => {
       return (window as any).debug?.getPerformanceStats?.()?.totalEntities || 0;
     });
     expect(entities).toBeGreaterThan(0);
-
-    console.log('✅ Collision & Scoring flow verified');
   });
 });

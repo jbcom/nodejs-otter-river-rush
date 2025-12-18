@@ -1,11 +1,12 @@
 #!/usr/bin/env node
+
 /**
  * Asset Quality Evaluator - Analyzes asset quality and detects issues
  */
 
-import sharp from 'sharp';
-import { readFileSync, existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
+import sharp from 'sharp';
 import type { AssetDefinition, QualityMetrics } from './asset-manifest.js';
 
 const PUBLIC_DIR = join(process.cwd(), 'public');
@@ -113,13 +114,16 @@ export async function evaluateAssetQuality(
     const hasWhiteBackgroundCheck = await detectWhiteBackground(buffer);
 
     // Calculate expected aspect ratio
-    const expectedAspectRatio = asset.expectedSize.width / asset.expectedSize.height;
+    const expectedAspectRatio =
+      asset.expectedSize.width / asset.expectedSize.height;
     const aspectRatioTolerance = 0.05; // 5% tolerance
-    const isDistorted = Math.abs(aspectRatio - expectedAspectRatio) > aspectRatioTolerance;
+    const isDistorted =
+      Math.abs(aspectRatio - expectedAspectRatio) > aspectRatioTolerance;
 
     // Check size constraints
-    const isUndersized = width < asset.expectedSize.width * 0.8 || 
-                         height < asset.expectedSize.height * 0.8;
+    const isUndersized =
+      width < asset.expectedSize.width * 0.8 ||
+      height < asset.expectedSize.height * 0.8;
     const isOversized = fileSizeKB > asset.maxFileSizeKB;
 
     // Collect issues
@@ -134,18 +138,24 @@ export async function evaluateAssetQuality(
       issues.push('Has white background instead of transparency');
     }
     if (isDistorted) {
-      issues.push(`Distorted aspect ratio: ${aspectRatio.toFixed(2)} (expected ${expectedAspectRatio.toFixed(2)})`);
+      issues.push(
+        `Distorted aspect ratio: ${aspectRatio.toFixed(2)} (expected ${expectedAspectRatio.toFixed(2)})`
+      );
     }
     if (isUndersized) {
-      issues.push(`Undersized: ${width}x${height} (expected ${asset.expectedSize.width}x${asset.expectedSize.height})`);
+      issues.push(
+        `Undersized: ${width}x${height} (expected ${asset.expectedSize.width}x${asset.expectedSize.height})`
+      );
     }
     if (isOversized) {
-      issues.push(`File too large: ${fileSizeKB}KB (max ${asset.maxFileSizeKB}KB)`);
+      issues.push(
+        `File too large: ${fileSizeKB}KB (max ${asset.maxFileSizeKB}KB)`
+      );
     }
 
     // Calculate quality score (0-100)
     let qualityScore = 100;
-    
+
     // Deduct points for each issue
     if (format !== asset.expectedFormat) qualityScore -= 20;
     if (asset.requiresTransparency && !hasTransparencyCheck) qualityScore -= 30;
@@ -157,8 +167,9 @@ export async function evaluateAssetQuality(
     qualityScore = Math.max(0, qualityScore);
 
     // Determine if regeneration is needed
-    const needsRegeneration = qualityScore < 70 || 
-                              (asset.requiresTransparency && hasWhiteBackgroundCheck);
+    const needsRegeneration =
+      qualityScore < 70 ||
+      (asset.requiresTransparency && hasWhiteBackgroundCheck);
 
     return {
       fileSize,
@@ -205,29 +216,25 @@ export async function evaluateAllAssets(
   const results = new Map<string, QualityMetrics>();
 
   for (const asset of manifest) {
-    console.log(`\n📊 Evaluating: ${asset.name}`);
     const quality = await evaluateAssetQuality(asset);
     results.set(asset.id, quality);
 
     // Display results
-    const scoreEmoji = quality.qualityScore >= 90 ? '✅' : 
-                       quality.qualityScore >= 70 ? '⚠️' : '❌';
-    console.log(`   ${scoreEmoji} Quality Score: ${quality.qualityScore}/100`);
-    console.log(`   📐 Size: ${quality.width}x${quality.height} (${quality.fileSizeKB}KB)`);
-    console.log(`   🎨 Format: ${quality.format}`);
-    console.log(`   🔍 Transparency: ${quality.hasTransparency ? 'Yes' : 'No'}`);
-    
+    const _scoreEmoji =
+      quality.qualityScore >= 90
+        ? '✅'
+        : quality.qualityScore >= 70
+          ? '⚠️'
+          : '❌';
+
     if (quality.hasWhiteBackground) {
-      console.log(`   🚨 WHITE BACKGROUND DETECTED (should be transparent)`);
     }
-    
+
     if (quality.issues.length > 0) {
-      console.log(`   ⚠️  Issues:`);
-      quality.issues.forEach(issue => console.log(`      - ${issue}`));
+      quality.issues.forEach((issue) => {});
     }
-    
+
     if (quality.needsRegeneration) {
-      console.log(`   🔄 NEEDS REGENERATION`);
     }
   }
 
@@ -241,77 +248,66 @@ export function generateQualityReport(
   manifest: AssetDefinition[],
   qualityResults: Map<string, QualityMetrics>
 ): void {
-  console.log('\n\n' + '='.repeat(80));
-  console.log('🎨 ASSET QUALITY REPORT');
-  console.log('='.repeat(80));
-
   const totalAssets = manifest.length;
-  const perfect = Array.from(qualityResults.values()).filter(q => q.qualityScore === 100).length;
-  const good = Array.from(qualityResults.values()).filter(q => q.qualityScore >= 70 && q.qualityScore < 100).length;
-  const poor = Array.from(qualityResults.values()).filter(q => q.qualityScore < 70).length;
-  const needRegeneration = Array.from(qualityResults.values()).filter(q => q.needsRegeneration).length;
-
-  console.log(`\n📊 Overall Statistics:`);
-  console.log(`   Total Assets: ${totalAssets}`);
-  console.log(`   ✅ Perfect (100): ${perfect}`);
-  console.log(`   ⚠️  Good (70-99): ${good}`);
-  console.log(`   ❌ Poor (<70): ${poor}`);
-  console.log(`   🔄 Need Regeneration: ${needRegeneration}`);
+  const _perfect = Array.from(qualityResults.values()).filter(
+    (q) => q.qualityScore === 100
+  ).length;
+  const _good = Array.from(qualityResults.values()).filter(
+    (q) => q.qualityScore >= 70 && q.qualityScore < 100
+  ).length;
+  const _poor = Array.from(qualityResults.values()).filter(
+    (q) => q.qualityScore < 70
+  ).length;
+  const needRegeneration = Array.from(qualityResults.values()).filter(
+    (q) => q.needsRegeneration
+  ).length;
 
   // Average quality score
-  const avgScore = Array.from(qualityResults.values())
-    .reduce((sum, q) => sum + q.qualityScore, 0) / totalAssets;
-  console.log(`   📈 Average Quality Score: ${avgScore.toFixed(1)}/100`);
-
-  // Assets by category
-  console.log(`\n📁 By Category:`);
+  const _avgScore =
+    Array.from(qualityResults.values()).reduce(
+      (sum, q) => sum + q.qualityScore,
+      0
+    ) / totalAssets;
   const categories = ['sprite', 'hud', 'icon', 'pwa', 'ui'] as const;
   for (const category of categories) {
-    const categoryAssets = manifest.filter(a => a.category === category);
-    const categoryScore = categoryAssets.reduce((sum, asset) => {
-      const quality = qualityResults.get(asset.id);
-      return sum + (quality?.qualityScore || 0);
-    }, 0) / categoryAssets.length;
-    
-    console.log(`   ${category.padEnd(8)}: ${categoryScore.toFixed(1)}/100 (${categoryAssets.length} assets)`);
+    const categoryAssets = manifest.filter((a) => a.category === category);
+    const _categoryScore =
+      categoryAssets.reduce((sum, asset) => {
+        const quality = qualityResults.get(asset.id);
+        return sum + (quality?.qualityScore || 0);
+      }, 0) / categoryAssets.length;
   }
 
   // Critical issues
-  const whiteBackgrounds = Array.from(qualityResults.entries())
-    .filter(([_, q]) => q.hasWhiteBackground);
-  const missingTransparency = Array.from(qualityResults.entries())
-    .filter(([id, q]) => {
-      const asset = manifest.find(a => a.id === id);
+  const whiteBackgrounds = Array.from(qualityResults.entries()).filter(
+    ([_, q]) => q.hasWhiteBackground
+  );
+  const missingTransparency = Array.from(qualityResults.entries()).filter(
+    ([id, q]) => {
+      const asset = manifest.find((a) => a.id === id);
       return asset?.requiresTransparency && !q.hasTransparency;
-    });
+    }
+  );
 
   if (whiteBackgrounds.length > 0) {
-    console.log(`\n🚨 CRITICAL: ${whiteBackgrounds.length} assets with WHITE BACKGROUNDS:`);
     whiteBackgrounds.forEach(([id, _]) => {
-      const asset = manifest.find(a => a.id === id);
-      console.log(`   - ${asset?.name} (${asset?.path})`);
+      const _asset = manifest.find((a) => a.id === id);
     });
   }
 
   if (missingTransparency.length > 0) {
-    console.log(`\n⚠️  ${missingTransparency.length} assets missing required transparency:`);
     missingTransparency.forEach(([id, _]) => {
-      const asset = manifest.find(a => a.id === id);
-      console.log(`   - ${asset?.name} (${asset?.path})`);
+      const _asset = manifest.find((a) => a.id === id);
     });
   }
 
   // Assets needing regeneration
   if (needRegeneration > 0) {
-    console.log(`\n🔄 ${needRegeneration} assets recommended for regeneration:`);
     Array.from(qualityResults.entries())
       .filter(([_, q]) => q.needsRegeneration)
       .forEach(([id, q]) => {
-        const asset = manifest.find(a => a.id === id);
-        console.log(`   - ${asset?.name} (Score: ${q.qualityScore}/100)`);
-        q.issues.forEach(issue => console.log(`     • ${issue}`));
+        const _asset = manifest.find((a) => a.id === id);
+        q.issues.forEach((issue) => {});
       });
   }
-
-  console.log('\n' + '='.repeat(80));
 }

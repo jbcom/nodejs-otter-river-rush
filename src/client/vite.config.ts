@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { VitePWA } from 'vite-plugin-pwa';
-import viteCompression from 'vite-plugin-compression';
 import path from 'path';
+import { defineConfig } from 'vite';
+import viteCompression from 'vite-plugin-compression';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   base: '/otter-river-rush/',

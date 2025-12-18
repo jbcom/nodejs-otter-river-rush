@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber';
-import { useGameStore } from '../hooks/useGameStore';
 import { useEffect, useRef } from 'react';
+import { useGameStore } from '../hooks/useGameStore';
 
 export function ComboSystem() {
   const comboTimerRef = useRef<number>(0);

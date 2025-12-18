@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
 
 export function useAnimationMixer(
   modelUrl: string,
@@ -32,24 +32,14 @@ export function useAnimationMixer(
     };
   }, [scene, animations]);
 
-  // Load additional animation clips
+  // Preload additional animation URLs (useGLTF.preload returns void, just triggers cache)
   useEffect(() => {
-    const loadAnimations = async () => {
-      for (const [name, url] of Object.entries(animationUrls)) {
-        try {
-          const { animations: clips } = (await useGLTF.preload(url)) as any;
-          if (clips && clips.length > 0 && mixerRef.current) {
-            const action = mixerRef.current.clipAction(clips[0]);
-            actionsRef.current.set(name, action);
-          }
-        } catch (error) {
-          console.warn(`Failed to load animation ${name}:`, error);
-        }
+    for (const url of Object.values(animationUrls)) {
+      try {
+        useGLTF.preload(url);
+      } catch (error) {
+        console.warn(`Failed to preload animation from ${url}:`, error);
       }
-    };
-
-    if (mixerRef.current) {
-      loadAnimations();
     }
   }, [animationUrls]);
 

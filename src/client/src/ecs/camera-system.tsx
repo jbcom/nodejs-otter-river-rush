@@ -1,5 +1,5 @@
-import { useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
+import { useRef } from 'react';
 import { queries } from './world';
 
 const playerEntities = queries.player;
@@ -27,7 +27,7 @@ export function CameraSystem() {
     }
 
     // Expose shake function globally
-    (window as any).__cameraShake = (intensity: number) => {
+    window.__cameraShake = (intensity: number) => {
       shakeRef.current.intensity = intensity;
     };
   });

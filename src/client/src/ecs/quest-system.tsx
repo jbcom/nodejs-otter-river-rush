@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useEffect, useRef } from 'react';
 import { useGameStore } from '../hooks/useGameStore';
 import { queries } from './world';
 
@@ -146,16 +146,13 @@ export function QuestSystem(): null {
         if (quest.reward.gems) {
           useGameStore.getState().collectGem(quest.reward.gems);
         }
-
-        // Show notification
-        console.log(`Quest completed: ${quest.title}`);
       }
     });
   });
 
   // Expose quest data via window for UI access
   useEffect(() => {
-    (window as any).quests = {
+    window.quests = {
       getActive: () => questsRef.current,
       getProgress: () => progressRef.current,
       recordNearMiss: () => {
@@ -173,7 +170,7 @@ export function QuestSystem(): null {
     };
 
     return () => {
-      delete (window as any).quests;
+      window.quests = undefined;
     };
   }, []);
 

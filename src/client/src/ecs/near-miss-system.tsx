@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber';
-import { queries, spawn } from './world';
 import { useGameStore } from '../hooks/useGameStore';
+import { queries, spawn } from './world';
 
 export function NearMissSystem() {
   const { status } = useGameStore();
@@ -19,12 +19,12 @@ export function NearMissSystem() {
       const dy = Math.abs(player.position.y - obstacle.position.y);
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      if (dist < NEAR_MISS_DISTANCE && !(obstacle as any).nearMissRecorded) {
+      if (dist < NEAR_MISS_DISTANCE && !obstacle.nearMissRecorded) {
         // Award near-miss bonus
         useGameStore.getState().updateScore(BONUS_POINTS);
         useGameStore.getState().incrementCombo();
 
-        (obstacle as any).nearMissRecorded = true;
+        obstacle.nearMissRecorded = true;
 
         // Spawn particles
         for (let i = 0; i < 6; i++) {

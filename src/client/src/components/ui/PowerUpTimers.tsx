@@ -8,8 +8,8 @@ export function PowerUpTimers() {
   const now = Date.now();
   const powerUps = [];
 
-  if (player.invincible && (player as any).powerUpEndTime) {
-    const timeLeft = Math.max(0, (player as any).powerUpEndTime - now) / 1000;
+  if (player.invincible && player.powerUpEndTime) {
+    const timeLeft = Math.max(0, player.powerUpEndTime - now) / 1000;
     powerUps.push({
       name: 'Shield',
       icon: '🛡️',
@@ -18,8 +18,8 @@ export function PowerUpTimers() {
     });
   }
 
-  if (player.ghost && (player as any).powerUpEndTime) {
-    const timeLeft = Math.max(0, (player as any).powerUpEndTime - now) / 1000;
+  if (player.ghost && player.powerUpEndTime) {
+    const timeLeft = Math.max(0, player.powerUpEndTime - now) / 1000;
     powerUps.push({
       name: 'Ghost',
       icon: '👻',
@@ -28,8 +28,8 @@ export function PowerUpTimers() {
     });
   }
 
-  if ((player as any).magnetActive && (player as any).magnetEndTime) {
-    const timeLeft = Math.max(0, (player as any).magnetEndTime - now) / 1000;
+  if (player.magnetActive && player.magnetEndTime) {
+    const timeLeft = Math.max(0, player.magnetEndTime - now) / 1000;
     powerUps.push({
       name: 'Magnet',
       icon: '🧲',

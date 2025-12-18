@@ -28,10 +28,7 @@
       "purpose": "maskable"
     }
   ],
-  "categories": [
-    "games",
-    "entertainment"
-  ],
+  "categories": ["games", "entertainment"],
   "shortcuts": [
     {
       "name": "Quick Play",

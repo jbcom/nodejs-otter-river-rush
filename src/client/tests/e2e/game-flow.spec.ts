@@ -1,5 +1,26 @@
 import { expect, test } from '@playwright/test';
 
+// Type for window in E2E context
+interface E2EWindow {
+  __gameStore?: {
+    getState: () => {
+      status: string;
+      score: number;
+      distance: number;
+      startGame: (mode: string) => void;
+      pauseGame: () => void;
+      resumeGame: () => void;
+      endGame: () => void;
+    };
+  };
+  debug?: {
+    getPerformanceStats: () => { totalEntities: number };
+    exportGameState: () => {
+      entities: Array<{ type: string; position: { x: number } }>;
+    };
+  };
+}
+
 test.describe('Game Flow E2E Tests', () => {
   test.beforeEach(async ({ page, baseURL }) => {
     await page.goto(baseURL || '/');
@@ -19,14 +40,16 @@ test.describe('Game Flow E2E Tests', () => {
 
   test('should start classic mode', async ({ page }) => {
     await page.evaluate(() =>
-      (window as any).__gameStore?.getState?.()?.startGame?.('classic')
+      (window as unknown as E2EWindow).__gameStore
+        ?.getState?.()
+        ?.startGame?.('classic')
     );
 
     await page.waitForTimeout(500);
 
     // Check game state changed to playing
     const status = await page.evaluate(() => {
-      return (window as any).__gameStore?.getState?.()?.status;
+      return (window as unknown as E2EWindow).__gameStore?.getState?.()?.status;
     });
 
     expect(status).toBe('playing');

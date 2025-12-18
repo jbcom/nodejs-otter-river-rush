@@ -73,7 +73,7 @@ app.on('window-all-closed', () => {
 app.on('web-contents-created', (_event, contents) => {
   contents.on('will-navigate', (event, navigationUrl) => {
     const parsedUrl = new URL(navigationUrl);
-    
+
     // Prevent navigation to external URLs
     if (parsedUrl.origin !== 'file://' && !isDev) {
       event.preventDefault();

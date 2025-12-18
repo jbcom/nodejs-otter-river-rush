@@ -8,10 +8,10 @@ import createReactAPI from 'miniplex-react';
 import type { Object3D } from 'three';
 import { ASSET_URLS } from '../config/game-constants';
 import {
-  PHYSICS,
-  VISUAL,
   getLaneX,
   getModelScale,
+  PHYSICS,
+  VISUAL,
 } from '../config/visual-constants';
 import {
   getModelVariantsSync,
@@ -75,6 +75,15 @@ export type Entity = {
   ghost?: true;
   collected?: true;
   destroyed?: true;
+
+  // Power-up tracking
+  powerUpType?: 'shield' | 'ghost' | 'magnet' | 'multiplier' | 'slow_motion';
+  powerUpEndTime?: number;
+  magnetActive?: boolean;
+  magnetEndTime?: number;
+
+  // Near-miss tracking
+  nearMissRecorded?: boolean;
 
   // Visual effects
   particle?: {
@@ -253,4 +262,5 @@ export const spawn = {
 };
 
 // Lazy-load models manifest at runtime for dynamic variants
-loadModelsManifest().catch(() => {});
+// Manifest loading is optional, fallback URLs are used if it fails
+loadModelsManifest().catch(() => undefined);

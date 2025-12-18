@@ -86,7 +86,7 @@ export function LeaderboardSystem(): null {
 
   // Expose leaderboard via window for UI access
   useEffect(() => {
-    (window as any).leaderboard = {
+    window.leaderboard = {
       get: (type: 'daily' | 'weekly' | 'allTime' = 'allTime') => {
         return leaderboardRef.current[type];
       },
@@ -112,7 +112,7 @@ export function LeaderboardSystem(): null {
     };
 
     return () => {
-      delete (window as any).leaderboard;
+      window.leaderboard = undefined;
     };
   }, []);
 

@@ -1,5 +1,5 @@
-import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useRef } from 'react';
 import { Mesh } from 'three';
 import { useGameStore } from '../../hooks/useGameStore';
 
@@ -12,10 +12,10 @@ export function River() {
 
     // Scroll water texture
     if (meshRef.current.material) {
-      const material = Array.isArray(meshRef.current.material) 
-        ? meshRef.current.material[0] 
+      const material = Array.isArray(meshRef.current.material)
+        ? meshRef.current.material[0]
         : meshRef.current.material;
-      
+
       if (material && 'map' in material) {
         const mat = material as {
           map?: { offset: { y: number } };
