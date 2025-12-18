@@ -3,10 +3,12 @@ import { queries, spawn, world } from '../ecs/world';
 export const debugTools = {
   // Entity inspection
   logAllEntities() {
+    // biome-ignore lint/suspicious/noConsole: debug tool intentionally uses console
     console.log('All entities:', world.entities);
   },
 
   logEntityCounts() {
+    // biome-ignore lint/suspicious/noConsole: debug tool intentionally uses console
     console.log('Entity counts:', {
       total: world.entities.length,
       obstacles: queries.obstacles.entities.length,
@@ -17,6 +19,7 @@ export const debugTools = {
 
   logPlayer() {
     const [player] = queries.player.entities;
+    // biome-ignore lint/suspicious/noConsole: debug tool intentionally uses console
     console.log('Player:', player);
   },
 

@@ -1,7 +1,7 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
-  "files": { "includes": ["**", "!!**/dist"] },
+  "files": { "includes": ["**"] },
   "formatter": {
     "enabled": true,
     "formatWithErrors": false,
@@ -66,6 +66,7 @@
         "noDuplicateObjectKeys": "error",
         "noDuplicateParameters": "error",
         "noEmptyBlockStatements": "warn",
+        "noExplicitAny": "warn",
         "noFallthroughSwitchClause": "error",
         "noFunctionAssign": "error",
         "noGlobalAssign": "error",
@@ -118,44 +119,6 @@
       "javascript": { "globals": ["process", "__dirname"] }
     },
     {
-      "includes": ["tests/**/*.ts"],
-      "javascript": {
-        "globals": [
-          "setInterval",
-          "console",
-          "clearTimeout",
-          "clearInterval",
-          "Buffer",
-          "process",
-          "setTimeout"
-        ]
-      },
-      "linter": {
-        "rules": {
-          "complexity": { "noUselessTypeConstraint": "error" },
-          "correctness": { "noUnusedVariables": "warn" },
-          "style": {
-            "noCommonJs": "warn",
-            "noNamespace": "error",
-            "useArrayLiterals": "error",
-            "useAsConstAssertion": "error"
-          },
-          "suspicious": {
-            "noConsole": {
-              "level": "warn",
-              "options": { "allow": ["warn", "error"] }
-            },
-            "noExplicitAny": "warn",
-            "noExtraNonNullAssertion": "error",
-            "noMisleadingInstantiator": "error",
-            "noNonNullAssertedOptionalChain": "error",
-            "noUnsafeDeclarationMerging": "error",
-            "useNamespaceKeyword": "error"
-          }
-        }
-      }
-    },
-    {
       "includes": ["**/*.ts", "**/*.tsx"],
       "javascript": {
         "globals": [
@@ -193,7 +156,74 @@
               "level": "warn",
               "options": { "allow": ["warn", "error"] }
             },
+            "noExplicitAny": "error",
+            "noExtraNonNullAssertion": "error",
+            "noMisleadingInstantiator": "error",
+            "noNonNullAssertedOptionalChain": "error",
+            "noUnsafeDeclarationMerging": "error",
+            "useNamespaceKeyword": "error"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/dev-tools/**/*.ts"],
+      "javascript": {
+        "globals": [
+          "process",
+          "console",
+          "Buffer",
+          "setTimeout",
+          "clearTimeout",
+          "__dirname"
+        ]
+      },
+      "linter": {
+        "rules": {
+          "suspicious": {
             "noExplicitAny": "warn",
+            "noEmptyBlockStatements": "warn",
+            "noConsole": "off"
+          },
+          "correctness": {
+            "noUnusedVariables": "warn"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/tests/**/*.ts", "**/tests/**/*.spec.ts"],
+      "javascript": {
+        "globals": [
+          "window",
+          "document",
+          "setInterval",
+          "console",
+          "clearTimeout",
+          "clearInterval",
+          "Buffer",
+          "process",
+          "setTimeout",
+          "requestAnimationFrame",
+          "performance"
+        ]
+      },
+      "linter": {
+        "rules": {
+          "complexity": { "noUselessTypeConstraint": "error" },
+          "correctness": { "noUnusedVariables": "warn" },
+          "style": {
+            "noCommonJs": "warn",
+            "noNamespace": "error",
+            "useArrayLiterals": "error",
+            "useAsConstAssertion": "error"
+          },
+          "suspicious": {
+            "noConsole": {
+              "level": "warn",
+              "options": { "allow": ["warn", "error"] }
+            },
+            "noExplicitAny": "off",
             "noExtraNonNullAssertion": "error",
             "noMisleadingInstantiator": "error",
             "noNonNullAssertedOptionalChain": "error",

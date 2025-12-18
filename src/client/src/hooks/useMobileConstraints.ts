@@ -127,9 +127,10 @@ export function useMobileConstraints(): MobileConstraints {
       if (screen.orientation && 'lock' in screen.orientation) {
         const { isPhone } = detectDeviceType();
         const lockTo = isPhone ? 'portrait' : 'landscape';
+        // Screen orientation lock may fail on unsupported browsers - safe to ignore
         (screen.orientation.lock as (orientation: string) => Promise<void>)(
           lockTo
-        ).catch(() => {});
+        ).catch(() => undefined);
       }
     };
 

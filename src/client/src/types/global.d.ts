@@ -94,6 +94,14 @@ export interface DebugTools {
 /** Camera shake function */
 export type CameraShakeFn = (intensity: number) => void;
 
+/** Exported entity state from debug tools */
+export interface ExportedEntity {
+  position: { x: number; y: number; z: number };
+  velocity?: { x: number; y: number; z: number };
+  health?: number;
+  type: string;
+}
+
 /** Leaderboard entry */
 export interface LeaderboardEntryGlobal {
   rank: number;

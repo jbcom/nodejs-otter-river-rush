@@ -18,7 +18,8 @@ class AudioManager {
     if (sound) {
       sound.currentTime = 0;
       sound.volume = volume;
-      sound.play().catch(() => {});
+      // Audio play may fail if user hasn't interacted with the page yet - safe to ignore
+      sound.play().catch(() => undefined);
     }
   }
 
@@ -29,7 +30,8 @@ class AudioManager {
     this.music = new Audio(url);
     this.music.volume = volume;
     this.music.loop = true;
-    this.music.play().catch(() => {});
+    // Audio play may fail if user hasn't interacted with the page yet - safe to ignore
+    this.music.play().catch(() => undefined);
   }
 
   stopMusic() {

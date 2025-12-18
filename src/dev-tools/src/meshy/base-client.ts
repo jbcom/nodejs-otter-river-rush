@@ -29,6 +29,13 @@ export const RATE_LIMITS = {
   },
 } as const;
 
+/** Error response data from Meshy API */
+export interface MeshyErrorResponse {
+  message?: string;
+  code?: string;
+  details?: unknown;
+}
+
 /**
  * Meshy error types
  */
@@ -36,7 +43,7 @@ export class MeshyError extends Error {
   constructor(
     message: string,
     public statusCode: number,
-    public responseBody?: any
+    public responseBody?: MeshyErrorResponse
   ) {
     super(message);
     this.name = 'MeshyError';
@@ -44,7 +51,7 @@ export class MeshyError extends Error {
 }
 
 export class MeshyRateLimitError extends MeshyError {
-  constructor(message: string, responseBody?: any) {
+  constructor(message: string, responseBody?: MeshyErrorResponse) {
     super(message, 429, responseBody);
     this.name = 'MeshyRateLimitError';
   }
@@ -168,10 +175,10 @@ export abstract class MeshyBaseClient {
     attempt: number
   ): Promise<never> {
     const body = await response.text();
-    let errorData: any;
+    let errorData: MeshyErrorResponse;
 
     try {
-      errorData = JSON.parse(body);
+      errorData = JSON.parse(body) as MeshyErrorResponse;
     } catch {
       errorData = { message: body };
     }
@@ -289,7 +296,8 @@ export abstract class MeshyBaseClient {
 
     const buffer = await response.buffer();
     const fs = await import('fs-extra');
-    await fs.ensureDir(require('path').dirname(outputPath));
+    const path = await import('path');
+    await fs.ensureDir(path.dirname(outputPath));
     await fs.writeFile(outputPath, buffer);
   }
 }

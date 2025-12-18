@@ -96,7 +96,11 @@ export function CollisionSystem() {
 
     // Check collectible collisions
     for (const collectible of collectibleEntities) {
-      if (player.collider && collectible.collider && checkCollision(player, collectible)) {
+      if (
+        player.collider &&
+        collectible.collider &&
+        checkCollision(player, collectible)
+      ) {
         handleCollect(player, collectible);
       }
     }

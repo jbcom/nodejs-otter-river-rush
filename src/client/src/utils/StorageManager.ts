@@ -22,7 +22,7 @@ export class StorageManager {
     const result = { ...target } as SaveData;
 
     for (const key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
+      if (Object.hasOwn(source, key)) {
         const sourceValue = source[key as keyof SaveData];
         const targetValue = result[key as keyof SaveData];
 

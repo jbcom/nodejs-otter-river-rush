@@ -262,4 +262,5 @@ export const spawn = {
 };
 
 // Lazy-load models manifest at runtime for dynamic variants
-loadModelsManifest().catch(() => {});
+// Manifest loading is optional, fallback URLs are used if it fails
+loadModelsManifest().catch(() => undefined);

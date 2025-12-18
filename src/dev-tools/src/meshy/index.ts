@@ -13,14 +13,23 @@
  */
 
 import { AnimationsAPI } from './animations.js';
-import { RetextureAPI } from './retexture.js';
-import { RiggingAPI } from './rigging.js';
-import { TextTo3DAPI } from './text_to_3d.js';
+import { RetextureAPI, type RetextureTaskParams } from './retexture.js';
+import { RiggingAPI, type RiggingTask } from './rigging.js';
+import {
+  type MeshyTask,
+  type CreateTaskParams as PreviewTaskParams,
+  TextTo3DAPI,
+} from './text_to_3d.js';
 
 export * from './animations.js';
 export * from './retexture.js';
 export * from './rigging.js';
 export * from './text_to_3d.js';
+
+/** Parameters for refine task */
+export interface RefineTaskParams {
+  texture_richness?: 'low' | 'medium' | 'high';
+}
 
 /**
  * Unified Meshy API with retry logic
@@ -45,24 +54,24 @@ export class MeshyAPI {
    * Shared retry logic for all API calls
    * Handles rate limits, server errors, retries
    */
-  async makeRequestWithRetry(
+  async makeRequestWithRetry<T = unknown>(
     url: string,
-    options: any,
+    options: RequestInit,
     maxRetries = 5
-  ): Promise<any> {
+  ): Promise<T> {
     for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
         const response = await fetch(url, options);
 
         if (response.ok) {
-          return response.json();
+          return response.json() as Promise<T>;
         }
 
         const errorText = await response.text();
-        let errorData: any = {};
+        let errorData: { message?: string } = {};
         try {
-          errorData = JSON.parse(errorText);
-        } catch (_e) {
+          errorData = JSON.parse(errorText) as { message?: string };
+        } catch {
           // Not JSON
         }
 
@@ -121,7 +130,7 @@ export class MeshyAPI {
   /**
    * Create preview task (uses text3d module)
    */
-  async createPreviewTask(params: any) {
+  async createPreviewTask(params: PreviewTaskParams) {
     return this.text3d.createPreviewTask(
       params,
       this.makeRequestWithRetry.bind(this)
@@ -131,7 +140,7 @@ export class MeshyAPI {
   /**
    * Create refine task (uses text3d module)
    */
-  async createRefineTask(previewTaskId: string, params?: any) {
+  async createRefineTask(previewTaskId: string, params?: RefineTaskParams) {
     return this.text3d.createRefineTask(
       previewTaskId,
       this.makeRequestWithRetry.bind(this),
@@ -150,7 +159,7 @@ export class MeshyAPI {
    * Create retexture task (uses retexture module)
    * THIS IS KEY FOR TILE VARIANTS
    */
-  async createRetextureTask(params: any) {
+  async createRetextureTask(params: RetextureTaskParams) {
     return this.retexture.createRetextureTask(
       params,
       this.makeRequestWithRetry.bind(this)
@@ -206,11 +215,11 @@ export class MeshyAPI {
     return this.retexture.deleteRetextureTask(taskId);
   }
 
-  getAnimationUrls(task: any) {
+  getAnimationUrls(task: RiggingTask) {
     return this.rigging.getAnimationUrls(task);
   }
 
-  getGLBUrl(task: any): string | null {
+  getGLBUrl(task: MeshyTask): string | null {
     if (task.model_urls?.glb) return task.model_urls.glb;
     if (task.model_url) return task.model_url;
     return null;
@@ -227,9 +236,9 @@ export class MeshyAPI {
     return filename;
   }
 
-  async getRecentTasks(estimatedJobCount: number = 600) {
+  async getRecentTasks(estimatedJobCount: number = 600): Promise<MeshyTask[]> {
     // Implementation for recovery manager
-    const allTasks: any[] = [];
+    const allTasks: MeshyTask[] = [];
     let pageNum = 1;
     const pageSize = 100;
     const tasksNeeded = Math.ceil(estimatedJobCount * 1.2);
@@ -250,8 +259,10 @@ export class MeshyAPI {
 
         pageNum++;
         await new Promise((resolve) => setTimeout(resolve, 500));
-      } catch (error: any) {
-        console.error(`   ⚠️  Error on page ${pageNum}: ${error.message}`);
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        console.error(`   ⚠️  Error on page ${pageNum}: ${errorMessage}`);
         if (allTasks.length > 0) break;
         throw error;
       }
