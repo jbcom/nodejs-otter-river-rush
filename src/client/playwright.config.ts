@@ -9,11 +9,15 @@ export default defineConfig({
   reporter: 'list',
   timeout: 30000, // 30s per test (default is 30s anyway)
   use: {
-    baseURL: process.env['BASE_URL'] || 'http://localhost:4173',
+    // Use the production base path for testing (Vite builds to /otter-river-rush/)
+    baseURL:
+      process.env['BASE_URL'] || 'http://localhost:4173/otter-river-rush/',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure', // Record video for failures (AI tests override to 'on')
     actionTimeout: 10000, // 10s for actions
+    // Ignore HTTPS errors in case of local certs
+    ignoreHTTPSErrors: true,
   },
   // Visual testing specific settings
   expect: {
