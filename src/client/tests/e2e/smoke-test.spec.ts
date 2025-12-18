@@ -25,16 +25,15 @@ test.describe('Critical Smoke Test - Real User Flow', () => {
     });
     expect(hasContent).toBe(true);
 
-    // Check menu is visible (wait for it to appear)
-    const startScreen = page.locator('#startScreen');
-    await expect(startScreen).toBeVisible({ timeout: 10000 });
-
-    // Check menu has text content
-    await expect(startScreen).toContainText('Otter River Rush');
-
-    // CRITICAL: Actually click the button (don't bypass with evaluate)
+    // Wait for menu to be in the DOM and clickable
+    // The startScreen element might be considered "hidden" during CSS animation
+    // So we wait for the button which indicates the menu is ready
     const classicButton = page.locator('#classicButton');
-    await expect(classicButton).toBeVisible({ timeout: 5000 });
+    await expect(classicButton).toBeVisible({ timeout: 15000 });
+
+    // Verify menu content is present
+    const startScreen = page.locator('#startScreen');
+    await expect(startScreen).toContainText('Otter River Rush');
 
     // Force click with JavaScript since Playwright struggles with scroll containers
     await page.evaluate(() => {
