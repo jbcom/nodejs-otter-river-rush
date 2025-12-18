@@ -94,23 +94,28 @@ test.describe('Critical Smoke Test - Real User Flow', () => {
 
     // STEP 9: Check WebGL context (with fallback for SwiftShader)
     const webglInfo = await page.evaluate(() => {
-      const canvas = document.querySelector('canvas');
+      const canvas = document.querySelector('canvas') as HTMLCanvasElement;
       if (!canvas) return { success: false, error: 'No canvas found' };
 
       try {
         const gl =
-          (canvas as HTMLCanvasElement).getContext('webgl2') ||
-          (canvas as HTMLCanvasElement).getContext('webgl') ||
-          (canvas as HTMLCanvasElement).getContext('experimental-webgl');
+          canvas.getContext('webgl2') ||
+          canvas.getContext('webgl') ||
+          (canvas.getContext('experimental-webgl') as WebGLRenderingContext);
         if (!gl) return { success: false, error: 'WebGL context is null' };
 
-        // Get renderer info if available
-        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-        const renderer = debugInfo
-          ? (gl as WebGLRenderingContext).getParameter(
+        // Get renderer info if available (only works with WebGL contexts)
+        let renderer = 'Unknown';
+        if ('getExtension' in gl) {
+          const debugInfo = (gl as WebGLRenderingContext).getExtension(
+            'WEBGL_debug_renderer_info'
+          );
+          if (debugInfo) {
+            renderer = (gl as WebGLRenderingContext).getParameter(
               debugInfo.UNMASKED_RENDERER_WEBGL
-            )
-          : 'Unknown';
+            );
+          }
+        }
 
         return { success: true, renderer };
       } catch (e) {
