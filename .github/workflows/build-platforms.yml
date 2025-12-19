@@ -118,7 +118,7 @@ jobs:
     
     steps:
       - name: Download web build
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: web-build-${{ github.sha }}
           path: dist/
@@ -167,7 +167,7 @@ jobs:
         run: npm ci
       
       - name: Download web build
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: web-build-${{ github.sha }}
           path: dist/
@@ -250,7 +250,7 @@ jobs:
         run: npm ci
       
       - name: Download web build
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: web-build-${{ github.sha }}
           path: dist/

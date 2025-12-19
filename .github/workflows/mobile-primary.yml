@@ -81,7 +81,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       
       - name: Download web dist
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: web-dist
           path: dist
@@ -124,7 +124,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       
       - name: Download web dist
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: web-dist
           path: dist
@@ -213,7 +213,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Download web dist
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: web-dist
           path: dist
