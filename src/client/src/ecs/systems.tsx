@@ -149,6 +149,8 @@ export function SpawnerSystem() {
   const startTimeRef = useRef(0);
 
   useFrame((_, dt) => {
+    const now = performance.now();
+
     if (status !== 'playing') {
       startTimeRef.current = 0;
       return;
@@ -156,21 +158,19 @@ export function SpawnerSystem() {
 
     // Initialize start time when game starts
     if (startTimeRef.current === 0) {
-      startTimeRef.current = performance.now();
+      startTimeRef.current = now;
       // Reset spawn timers so we don't spawn immediately
-      lastObstacleSpawn.current = performance.now();
-      lastCollectibleSpawn.current = performance.now();
+      lastObstacleSpawn.current = now;
+      lastCollectibleSpawn.current = now;
     }
 
-    // Grace period (e.g. 1.5s) where NO obstacles spawn
-    // Critical for mobile loading / smoke tests
-    if (performance.now() - startTimeRef.current < 1500) {
+    // Grace period where NO obstacles spawn - critical for mobile loading
+    if (now - startTimeRef.current < PHYSICS.spawnGracePeriodMs) {
       return;
     }
 
     accumulatorMs.current += dt * 1000;
     while (accumulatorMs.current >= fixedStepMs) {
-      const now = performance.now();
       if (
         now - lastObstacleSpawn.current >
         PHYSICS.spawnInterval.obstacles * 1000

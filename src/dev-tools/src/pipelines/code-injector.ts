@@ -6,12 +6,6 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
-// interface InjectionTarget {
-//   file: string;
-//   additions: string[];
-//   location: 'imports' | 'types' | 'queries' | 'render';
-// }
-
 export class CodeInjector {
   /**
    * Auto-wire enemy types into Entity definition
