@@ -1,6 +1,6 @@
 # Active Context - Otter River Rush
 
-**Last Updated**: 2024-10-28
+**Last Updated**: 2025-12-24
 **Current Branch**: main
 **Session Status**: ✅ PRODUCTION READY - ALL SYSTEMS OPERATIONAL
 
@@ -198,3 +198,10 @@
 4. Collect user feedback on mobile UX
 5. Optimize based on real device performance
 6. Consider background music (Kenney Music Loops available)
+## Session: 2025-12-24
+### Merged CI and Dependency Updates
+- Merged PR #35: Bump `actions/upload-pages-artifact` from 3.0.1 to 4.0.0.
+- Merged PR #36: Bump `actions/github-script` from 7 to 8.
+- Merged PR #37: Bump `js-yaml` from 4.1.0 to 4.1.1 (Security fix for prototype pollution).
+- Verified that lint, type-check, and unit tests pass locally on these branches before merging.
+- CI failures in PRs were identified as pre-existing issues in the CI environment (e.g., Capacitor sync missing Android platform) or transient issues, rather than being caused by the updates themselves.

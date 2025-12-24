@@ -1,6 +1,6 @@
 # Progress - Otter River Rush
 
-**Last Updated**: December 2024  
+**Last Updated**: 2025-12-24
 **Current Version**: Alpha Plus (E2E Test Fixes Applied)  
 **Latest Session**: Major CI pipeline recovery - E2E test fixes completed ✅
 
@@ -478,3 +478,7 @@
 **Major Milestones**: Document in [History](../history/)  
 **Track Active Work**: Keep [Active Context](./activeContext.md) updated  
 **Production Plan**: See [PRODUCTION_MIGRATION_PLAN.md](../implementation/PRODUCTION_MIGRATION_PLAN.md)
+
+### ✅ December 2025 Updates
+- **Dependency Security**: Updated `js-yaml` to 4.1.1 to fix prototype pollution vulnerability.
+- **CI Maintenance**: Updated GitHub Actions (`upload-pages-artifact`, `github-script`) to latest versions.
