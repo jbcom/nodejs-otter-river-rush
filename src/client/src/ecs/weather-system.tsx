@@ -40,9 +40,9 @@ export function WeatherSystem(): React.JSX.Element {
       case 1:
         return 'fog'; // Mountain - foggy
       case 2:
-        return 'clear'; // Canyon - clear but dusty
+        return 'rain'; // Canyon - rainy
       case 3:
-        return 'snow'; // Crystal caves - snow/sparkles
+        return 'storm'; // Crystal caves - stormy
       default:
         return 'clear';
     }
