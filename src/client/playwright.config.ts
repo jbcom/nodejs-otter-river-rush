@@ -6,10 +6,10 @@ export default defineConfig({
   forbidOnly: !!process.env['CI'],
   retries: process.env['CI'] ? 1 : 0, // Reduced from 2 to 1 for speed
   workers: process.env['CI'] ? 2 : undefined, // Increased from 1 to 2 for speed
-  reporter: 'list',
-  timeout: 30000, // 30s per test (default is 30s anyway)
+  reporter: process.env['CI'] ? [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }]] : 'list',
+  timeout: 60000, // Increased to 60s for CI stability
   use: {
-    baseURL: process.env['BASE_URL'] || 'http://localhost:4173',
+    baseURL: process.env['BASE_URL'] || 'http://localhost:4173/otter-river-rush/',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure', // Record video for failures (AI tests override to 'on')

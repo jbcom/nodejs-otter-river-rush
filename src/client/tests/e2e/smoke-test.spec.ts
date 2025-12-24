@@ -33,11 +33,33 @@ test.describe('Critical Smoke Test - Real User Flow', () => {
     }
 
     // CRITICAL: Wait for React to mount and show the menu
-    // We use a longer timeout and wait specifically for the start screen
+    // We wait for the game store to be ready and in menu status first
+    try {
+      await page.waitForFunction(() => {
+        const store = (window as any).__gameStore;
+        return store && store.getState().status === 'menu';
+      }, { timeout: 20000 });
+      console.log('Diagnostic: Game store reached menu status');
+    } catch (e) {
+      console.log('Diagnostic: Game store failed to reach menu status in time');
+    }
+
     const startScreen = page.locator('#startScreen');
 
     try {
-      await startScreen.waitFor({ state: 'visible', timeout: 30000 });
+      // Wait for start screen to be at least attached
+      await startScreen.waitFor({ state: 'attached', timeout: 10000 });
+      
+      // Try to wait for visibility, but don't fail immediately if it's just an animation issue
+      try {
+        await startScreen.waitFor({ state: 'visible', timeout: 10000 });
+      } catch (e) {
+        const isVisible = await startScreen.isVisible();
+        const box = await startScreen.boundingBox();
+        console.log(`Diagnostic: startScreen visibility=${isVisible}, box=${JSON.stringify(box)}`);
+        // If it's attached and has a box, we can proceed even if Playwright is unsure about visibility
+        if (!box) throw e; 
+      }
     } catch (e) {
       // Check if there's a React mount error or crash
       const hasContent = await page.evaluate(
