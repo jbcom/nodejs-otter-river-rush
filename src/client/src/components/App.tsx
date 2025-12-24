@@ -1,18 +1,32 @@
-import React, { Suspense, lazy } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { useGameStore } from '../hooks/useGameStore';
 
 // Lazy load game and UI components for better bundle splitting
-const GameCanvas = lazy(() => import('./game/GameCanvas').then(m => ({ default: m.GameCanvas })));
-const GameHUD = lazy(() => import('./ui/GameHUD').then(m => ({ default: m.GameHUD })));
-const GameOver = lazy(() => import('./ui/GameOver').then(m => ({ default: m.GameOver })));
-const MainMenu = lazy(() => import('./ui/MainMenu').then(m => ({ default: m.MainMenu })));
+const GameCanvas = lazy(() =>
+  import('./game/GameCanvas').then((m) => ({ default: m.GameCanvas }))
+);
+const GameHUD = lazy(() =>
+  import('./ui/GameHUD').then((m) => ({ default: m.GameHUD }))
+);
+const GameOver = lazy(() =>
+  import('./ui/GameOver').then((m) => ({ default: m.GameOver }))
+);
+const MainMenu = lazy(() =>
+  import('./ui/MainMenu').then((m) => ({ default: m.MainMenu }))
+);
 
 export function App(): React.JSX.Element {
   const { status } = useGameStore();
 
   return (
     <div className="fixed inset-0 w-screen h-screen">
-      <Suspense fallback={<div className="fixed inset-0 bg-slate-900 flex items-center justify-center text-white">Loading...</div>}>
+      <Suspense
+        fallback={
+          <div className="fixed inset-0 bg-slate-900 flex items-center justify-center text-white">
+            Loading...
+          </div>
+        }
+      >
         {status !== 'menu' && <GameCanvas showStats={import.meta.env.DEV} />}
 
         {status === 'menu' && <MainMenu />}

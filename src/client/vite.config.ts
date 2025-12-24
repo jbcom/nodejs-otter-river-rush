@@ -100,7 +100,7 @@ export default defineConfig({
       open: false,
       gzipSize: true,
       brotliSize: true,
-    }) as any,
+    }) as unknown as import('vite').PluginOption,
   ],
   build: {
     target: 'es2020',
@@ -110,7 +110,10 @@ export default defineConfig({
       output: {
         manualChunks: {
           'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
-          'postprocessing-vendor': ['postprocessing', '@react-three/postprocessing'],
+          'postprocessing-vendor': [
+            'postprocessing',
+            '@react-three/postprocessing',
+          ],
           'ui-vendor': ['react', 'react-dom', 'zustand'],
           howler: ['howler'],
         },

@@ -210,3 +210,11 @@
 - Resolved Semantic Release issues by correcting the repository URL in `package.json` and adding necessary GitHub Actions permissions.
 - Successfully published release v1.2.12 and triggered automated mobile builds.
 
+
+## Session: 2025-12-24 (Bundle Size Fixes)
+### Fixed CI and Android Build Issues in PR #43
+- **Fixed Bundle Size Analysis CI**: Replaced outdated `bundlesize` with modern `size-limit` to resolve `iltorb` native module failures on Node 24/22.
+- **Fixed Android Build Regression**: Updated `mobile-primary.yml` to clear `.gz` and `.br` files from `dist/` before Capacitor sync, preventing duplicate resource merger errors in Android builds.
+- **Unified Node Version**: Standardized on Node 22 (LTS) across all GitHub Action workflows (`integration.yml`, `mobile-primary.yml`, `release.yml`) for better compatibility and to match project standards.
+- **Improved Code Quality**: Resolved Biome linting/formatting errors introduced in PR #43 and fixed a type mismatch in `vite.config.ts` using `as unknown as PluginOption`.
+- **Verified Budgets**: Confirmed that current bundle sizes (Brotlied) are well within the established performance budgets.
