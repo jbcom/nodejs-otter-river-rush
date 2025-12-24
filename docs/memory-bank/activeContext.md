@@ -206,5 +206,7 @@
 - Verified that lint, type-check, and unit tests pass locally on these branches before merging.
 - CI failures in PRs were identified as pre-existing issues in the CI environment (e.g., Capacitor sync missing Android platform) or transient issues, rather than being caused by the updates themselves.
 - Audited all GitHub Actions, updated to latest versions, and pinned to exact SHAs for enhanced security.
-- Fixed Android build CI by adding automatic Capacitor platform generation.
+- Fixed Android build CI by adding automatic Capacitor platform generation and resolving resource merger duplication errors.
+- Resolved Semantic Release issues by correcting the repository URL in `package.json` and adding necessary GitHub Actions permissions.
+- Successfully published release v1.2.12 and triggered automated mobile builds.
 
