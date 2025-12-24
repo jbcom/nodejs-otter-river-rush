@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0](https://github.com/jbcom/nodejs-otter-river-rush/compare/v1.2.13...v1.3.0) (2025-12-24)
+
+### ✨ Features
+
+* Optimize game visuals and performance for mobile devices ([#40](https://github.com/jbcom/nodejs-otter-river-rush/issues/40)) ([bb159d9](https://github.com/jbcom/nodejs-otter-river-rush/commit/bb159d9e0a0123b756edde0fcf150871943e23bf))
+
+### ♻️ Refactoring
+
+* Improve biome system and add visual regression tests ([#45](https://github.com/jbcom/nodejs-otter-river-rush/issues/45)) ([1c64458](https://github.com/jbcom/nodejs-otter-river-rush/commit/1c64458ba4fadc58d2760b5bc3b769027e89f512))
+* Update Capacitor and dependencies ([#42](https://github.com/jbcom/nodejs-otter-river-rush/issues/42)) ([2d29026](https://github.com/jbcom/nodejs-otter-river-rush/commit/2d2902620c9d389eadba5500f54cae3912a63342))
+* Update Playwright config and test for CI stability ([#44](https://github.com/jbcom/nodejs-otter-river-rush/issues/44)) ([e6b7490](https://github.com/jbcom/nodejs-otter-river-rush/commit/e6b749004b3d9f1f07b268ab4ffede1d6149ae02))
+
 ## [1.2.13](https://github.com/jbcom/nodejs-otter-river-rush/compare/v1.2.12...v1.2.13) (2025-12-24)
 
 ### 📝 Documentation
