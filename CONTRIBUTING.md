@@ -431,8 +431,13 @@ We especially welcome contributions in:
 Need help? Here are some resources:
 
 - **Documentation**: Check the [README](./README.md)
+<<<<<<< HEAD
 - **Discussions**: [GitHub Discussions](https://github.com/jbcom/nodejs-otter-river-rush/discussions)
 - **Issues**: [Browse existing issues](https://github.com/jbcom/nodejs-otter-river-rush/issues)
+=======
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/nodejs-otter-river-rush/discussions)
+- **Issues**: [Browse existing issues](https://github.com/yourusername/nodejs-otter-river-rush/issues)
+>>>>>>> origin/fix/issue-19
 - **Discord**: [Join our community](#) (coming soon)
 
 ## 🙏 Recognition
