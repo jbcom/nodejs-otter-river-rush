@@ -483,3 +483,9 @@
 - **Dependency Security**: Updated `js-yaml` to 4.1.1 to fix prototype pollution vulnerability.
 - **CI Maintenance**: Updated GitHub Actions to latest versions and pinned to exact SHAs for enhanced security.
 - **CI Fixes**: Improved Android build workflow by adding automatic Capacitor platform generation.
+- **Showcase & Examples**: 
+  - Created `examples/` for developers with ECS, R3F, and custom data definition snippets.
+  - Established `showcase/` with visual assets and project highlights.
+  - Created `DEMO.md` highlighting Rapier-powered WASM physics.
+  - Standardized repository URLs to `nodejs-otter-river-rush` and fixed GitHub Pages deployment configuration.
+  - Resolved `pnpm` missing issue in CI builds.

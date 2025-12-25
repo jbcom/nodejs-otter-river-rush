@@ -61,31 +61,36 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
+        with:
+          version: 10
+      
       - name: Setup Node.js
         uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
         with:
           node-version: '24'
-          cache: 'npm'
+          cache: 'pnpm'
       
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       
       - name: Generate fresh assets (if requested)
         if: github.event_name == 'workflow_dispatch' && inputs.generate_assets
         run: |
           echo "🎨 Generating fresh game content..."
-          npm run generate-content || echo "⚠️  Content generation failed"
-          npm run generate-sprites || echo "⚠️  Sprite generation failed"
-          npm run generate-hud || echo "⚠️  HUD generation failed"
-          npm run generate-ui-icons || echo "⚠️  UI icons failed"
-          npm run asset-pipeline || echo "⚠️  Asset pipeline failed"
+          pnpm run generate-content || echo "⚠️  Content generation failed"
+          pnpm run generate-sprites || echo "⚠️  Sprite generation failed"
+          pnpm run generate-hud || echo "⚠️  HUD generation failed"
+          pnpm run generate-ui-icons || echo "⚠️  UI icons failed"
+          pnpm run asset-pipeline || echo "⚠️  Asset pipeline failed"
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         continue-on-error: true
       
       - name: Build web
-        run: npm run build
+        run: pnpm run build
         env:
           NODE_ENV: production
       
@@ -157,14 +162,19 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
+        with:
+          version: 10
+      
       - name: Setup Node.js
         uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
         with:
           node-version: '24'
-          cache: 'npm'
+          cache: 'pnpm'
       
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       
       - name: Download web build
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
@@ -173,7 +183,7 @@ jobs:
           path: dist/
       
       - name: Build Electron app (reusing web build)
-        run: npm run electron:build
+        run: pnpm run electron:build
       
       - name: Rename builds
         shell: bash
@@ -240,14 +250,19 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
+        with:
+          version: 10
+      
       - name: Setup Node.js
         uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
         with:
           node-version: '24'
-          cache: 'npm'
+          cache: 'pnpm'
       
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       
       - name: Download web build
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
@@ -257,10 +272,13 @@ jobs:
       
       - name: Sync Capacitor (reusing web build)
         run: |
+          if [ ! -d "android" ]; then
+            pnpm exec cap add android
+          fi
           # Clear compressed files to avoid Android resource merger duplicates
           find dist -name "*.gz" -delete
           find dist -name "*.br" -delete
-          npx cap sync android
+          pnpm exec cap sync android
       
       - name: Setup JDK 21
         uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
@@ -327,17 +345,22 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
+        with:
+          version: 10
+      
       - name: Setup Node.js
         uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
         with:
           node-version: '24'
-          cache: 'npm'
+          cache: 'pnpm'
       
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       
       - name: Install Playwright
-        run: npx playwright install --with-deps
+        run: pnpm exec playwright install --with-deps
       
       - name: Get deployment URL
         id: get-url
@@ -355,7 +378,7 @@ jobs:
           curl -f "${{ steps.get-url.outputs.PAGES_URL }}" || sleep 30
       
       - name: Run E2E tests against DEPLOYED site
-        run: npm run test:e2e
+        run: pnpm run test:e2e
         env:
           BASE_URL: ${{ steps.get-url.outputs.PAGES_URL }}
       

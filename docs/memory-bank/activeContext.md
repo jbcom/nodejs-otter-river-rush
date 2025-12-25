@@ -198,15 +198,19 @@
 4. Collect user feedback on mobile UX
 5. Optimize based on real device performance
 6. Consider background music (Kenney Music Loops available)
-## Session: 2025-12-24
-### Merged CI and Dependency Updates
-- Merged PR #35: Bump `actions/upload-pages-artifact` from 3.0.1 to 4.0.0.
-- Merged PR #36: Bump `actions/github-script` from 7 to 8.
-- Merged PR #37: Bump `js-yaml` from 4.1.0 to 4.1.1 (Security fix for prototype pollution).
-- Verified that lint, type-check, and unit tests pass locally on these branches before merging.
-- CI failures in PRs were identified as pre-existing issues in the CI environment (e.g., Capacitor sync missing Android platform) or transient issues, rather than being caused by the updates themselves.
-- Audited all GitHub Actions, updated to latest versions, and pinned to exact SHAs for enhanced security.
-- Fixed Android build CI by adding automatic Capacitor platform generation and resolving resource merger duplication errors.
-- Resolved Semantic Release issues by correcting the repository URL in `package.json` and adding necessary GitHub Actions permissions.
-- Successfully published release v1.2.12 and triggered automated mobile builds.
 
+## Session: 2025-12-24 (Showcase & Demo)
+
+### Completed
+- [x] Fixed `build-platforms.yml` workflow to use `pnpm` and fixed build failures.
+- [x] Created `examples/` directory with custom obstacle, achievement, level segment, ECS system, entity definition, and R3F component examples.
+- [x] Established `showcase/` directory with screenshots extracted from E2E test snapshots and a comprehensive gallery.
+- [x] Created `DEMO.md` highlighting the playable WASM (Rapier) demo and technical aspects.
+- [x] Updated `README.md` with links to the new demo, examples, and correct repository structure.
+- [x] Unified repository URLs and subpaths to `nodejs-otter-river-rush` across the codebase and documentation.
+- [x] Fixed GitHub Pages deployment configuration (base URL and PWA manifest).
+
+### For Next Agent
+- [ ] Monitor GitHub Pages deployment to ensure the demo is live.
+- [ ] Consider fully migrating the custom AABB collision system to Rapier (WASM) for better performance and deterministic physics.
+- [ ] Add more complex examples to the `examples/` directory as the game grows.
