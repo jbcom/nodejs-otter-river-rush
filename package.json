@@ -31,8 +31,27 @@
     "pipeline": "pnpm --filter dev-tools pipeline",
     "quality-check": "pnpm --filter dev-tools quality-check",
     "verify": "biome check . && pnpm --filter client type-check && pnpm --filter client test -- --run",
+    "bundle-report": "size-limit",
     "prepare": "husky"
   },
+  "size-limit": [
+    {
+      "path": "dist/assets/index-*.js",
+      "limit": "50 KB"
+    },
+    {
+      "path": "dist/assets/three-vendor-*.js",
+      "limit": "400 KB"
+    },
+    {
+      "path": "dist/assets/GameCanvas-*.js",
+      "limit": "150 KB"
+    },
+    {
+      "path": "dist/assets/postprocessing-vendor-*.js",
+      "limit": "40 KB"
+    }
+  ],
   "build": {
     "appId": "com.ottergames.riverrush",
     "productName": "Otter River Rush",
@@ -73,6 +92,7 @@
     "@capacitor/core": "^8.0.0",
     "@capacitor/ios": "^8.0.0",
     "@playwright/test": "^1.57.0",
+    "@size-limit/file": "^12.0.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/howler": "^2.2.12",
     "@types/node": "^25.0.3",
@@ -95,6 +115,7 @@
     "postcss": "^8.5.6",
     "rollup-plugin-visualizer": "^6.0.5",
     "sharp": "^0.34.5",
+    "size-limit": "^12.0.0",
     "tailwindcss": "^4.1.18",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",

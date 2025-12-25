@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { defineConfig } from 'vite';
+import { visualizer } from 'rollup-plugin-visualizer';
+import { defineConfig, type PluginOption } from 'vite';
 import viteCompression from 'vite-plugin-compression';
 import { VitePWA } from 'vite-plugin-pwa';
 
@@ -94,6 +95,13 @@ export default defineConfig({
       algorithm: 'brotliCompress',
       ext: '.br',
     }),
+    visualizer({
+      // Output to the same directory as the build artifacts
+      filename: '../../dist/stats.html',
+      open: false,
+      gzipSize: true,
+      brotliSize: true,
+    }) as PluginOption,
   ],
   build: {
     target: 'es2020',
@@ -102,6 +110,12 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
+          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
+          'postprocessing-vendor': [
+            'postprocessing',
+            '@react-three/postprocessing',
+          ],
+          'ui-vendor': ['react', 'react-dom', 'zustand'],
           howler: ['howler'],
         },
       },
