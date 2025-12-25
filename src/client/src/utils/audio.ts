@@ -9,6 +9,8 @@ import { Howl } from 'howler';
 const sounds: Record<string, Howl> = {};
 // Ambient loop registry
 const ambients: Record<string, Howl> = {};
+// Target volume registry
+const targetVolumes: Record<string, number> = {};
 
 // Audio enabled state (user must interact first for mobile)
 let audioEnabled = true;
@@ -88,6 +90,7 @@ function loadAmbient(id: string, src: string, volume = 0.5): Howl {
   });
 
   ambients[id] = sound;
+  targetVolumes[id] = volume;
   return sound;
 }
 
@@ -110,11 +113,19 @@ export function playAmbient(id: string, fade = 1000) {
   if (!audioEnabled || !audioUnlocked) return;
 
   const sound = ambients[id];
+  const targetVolume = targetVolumes[id] || 0.5;
+
   if (sound) {
-    if (!sound.playing()) {
-      sound.play();
-      sound.fade(0, sound.volume(), fade);
+    // If it's already playing, we don't need to do anything
+    // unless it's fading out, in which case we stop the fade
+    if (sound.playing()) {
+      sound.fade(sound.volume(), targetVolume, 0); // Cancel ongoing fade
+      return;
     }
+
+    sound.volume(0);
+    sound.play();
+    sound.fade(0, targetVolume, fade);
   }
 }
 
@@ -125,11 +136,12 @@ export function stopAmbient(id: string, fade = 1000) {
   const sound = ambients[id];
   if (sound && sound.playing()) {
     sound.fade(sound.volume(), 0, fade);
-    setTimeout(() => {
-      if (sound.playing()) {
+    sound.once('fade', () => {
+      // Only stop if volume reached 0 (fade completed)
+      if (sound.volume() === 0) {
         sound.stop();
       }
-    }, fade);
+    });
   }
 }
 

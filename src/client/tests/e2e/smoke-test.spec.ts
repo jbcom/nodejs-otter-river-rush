@@ -11,11 +11,11 @@ test.describe('Critical Smoke Test - Real User Flow', () => {
     page,
   }) => {
     // Navigate
-    page.on('console', (msg) => {
-      console.log(`BROWSER CONSOLE: [${msg.type()}] ${msg.text()}`);
+    page.on('console', (_msg) => {
+      // Ignore console logs in CI
     });
-    page.on('pageerror', (err) => {
-      console.log(`BROWSER PAGE ERROR: ${err.message}`);
+    page.on('pageerror', (_err) => {
+      // Ignore page errors in CI
     });
     await page.goto('/');
     await page.waitForLoadState('networkidle');
@@ -24,12 +24,8 @@ test.describe('Critical Smoke Test - Real User Flow', () => {
     const storeExists = await page.evaluate(
       () => !!(window as any).__gameStore
     );
-    console.log(`Diagnostic: __gameStore exists=${storeExists}`);
     if (storeExists) {
-      const state = await page.evaluate(() =>
-        (window as any).__gameStore.getState()
-      );
-      console.log(`Diagnostic: Initial status=${state.status}`);
+      await page.evaluate(() => (window as any).__gameStore.getState());
     }
 
     // CRITICAL: Wait for React to mount and show the menu
@@ -38,18 +34,10 @@ test.describe('Critical Smoke Test - Real User Flow', () => {
 
     try {
       await startScreen.waitFor({ state: 'visible', timeout: 30000 });
-    } catch (e) {
+    } catch (_e) {
       // Check if there's a React mount error or crash
-      const hasContent = await page.evaluate(
-        () => document.body.textContent?.length || 0
-      );
-      const hasAppRoot = await page.evaluate(
-        () => !!document.getElementById('app')
-      );
-
-      console.log(
-        `Diagnostic: content length=${hasContent}, app root exists=${hasAppRoot}`
-      );
+      await page.evaluate(() => document.body.textContent?.length || 0);
+      await page.evaluate(() => !!document.getElementById('app'));
 
       const hasError = await page
         .locator('h1:has-text("Game Error")')

@@ -1,7 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useBiome } from '../../ecs/biome-system';
 import { useGameStore } from '../../hooks/useGameStore';
+import { useWeather } from '../../hooks/useWeather';
 import { audio } from '../../utils/audio';
+
+const MIN_THUNDER_DELAY_MS = 5000;
+const MAX_THUNDER_DELAY_MS = 15000;
 
 /**
  * AudioEnvironment component
@@ -9,24 +13,28 @@ import { audio } from '../../utils/audio';
  */
 export function AudioEnvironment(): React.JSX.Element {
   const biome = useBiome();
-  const { status, distance } = useGameStore();
-  
-  // Determine weather based on distance (matches WeatherSystem logic)
-  const getWeatherType = (dist: number) => {
-    const segment = Math.floor(dist / 1000) % 4;
-    switch (segment) {
-      case 0: return 'clear';
-      case 1: return 'fog';
-      case 2: return 'rain'; // Changed from clear to rain for better audio variety
-      case 3: return 'storm'; // Changed from snow to storm for better audio variety
-      default: return 'clear';
-    }
-  };
+  const { status } = useGameStore();
+  const weather = useWeather();
 
-  const weather = getWeatherType(distance);
   const lastBiomeRef = useRef<string>('');
   const lastWeatherRef = useRef<string>('');
   const thunderTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Helper to map biome name to ambient ID
+  const getAmbientId = useCallback((biomeName: string): string => {
+    switch (biomeName) {
+      case 'Forest Stream':
+        return 'ambient-forest';
+      case 'Mountain Rapids':
+        return 'ambient-mountain';
+      case 'Canyon River':
+        return 'ambient-desert';
+      case 'Crystal Falls':
+        return 'ambient-waterfall';
+      default:
+        return 'ambient-forest';
+    }
+  }, []);
 
   // Handle Biome Ambience
   useEffect(() => {
@@ -36,6 +44,7 @@ export function AudioEnvironment(): React.JSX.Element {
       lastWeatherRef.current = '';
       if (thunderTimeoutRef.current) {
         clearTimeout(thunderTimeoutRef.current);
+        thunderTimeoutRef.current = null;
       }
       return;
     }
@@ -45,11 +54,11 @@ export function AudioEnvironment(): React.JSX.Element {
       if (lastBiomeRef.current) {
         audio.stopAmbient(getAmbientId(lastBiomeRef.current));
       }
-      
+
       audio.playAmbient(getAmbientId(biome.name));
       lastBiomeRef.current = biome.name;
     }
-  }, [biome.name, status]);
+  }, [biome.name, status, getAmbientId]);
 
   // Handle Weather SFX
   useEffect(() => {
@@ -57,10 +66,16 @@ export function AudioEnvironment(): React.JSX.Element {
 
     if (weather !== lastWeatherRef.current) {
       // Stop previous weather loops
-      if (lastWeatherRef.current === 'rain' || lastWeatherRef.current === 'storm') {
+      if (
+        lastWeatherRef.current === 'rain' ||
+        lastWeatherRef.current === 'storm'
+      ) {
         audio.stopWeather('rain');
       }
-      if (lastWeatherRef.current === 'fog' || lastWeatherRef.current === 'storm') {
+      if (
+        lastWeatherRef.current === 'fog' ||
+        lastWeatherRef.current === 'storm'
+      ) {
         audio.stopWeather('wind');
       }
 
@@ -71,7 +86,7 @@ export function AudioEnvironment(): React.JSX.Element {
       if (weather === 'fog' || weather === 'storm') {
         audio.playWeather('wind');
       }
-      
+
       lastWeatherRef.current = weather;
     }
   }, [weather, status]);
@@ -80,35 +95,30 @@ export function AudioEnvironment(): React.JSX.Element {
   useEffect(() => {
     if (status === 'playing' && weather === 'storm') {
       const scheduleThunder = () => {
-        const delay = 5000 + Math.random() * 15000;
+        const delay =
+          MIN_THUNDER_DELAY_MS +
+          Math.random() * (MAX_THUNDER_DELAY_MS - MIN_THUNDER_DELAY_MS);
         thunderTimeoutRef.current = setTimeout(() => {
-          audio.thunder();
-          scheduleThunder();
+          if (status === 'playing' && weather === 'storm') {
+            audio.thunder();
+            scheduleThunder();
+          }
         }, delay);
       };
-      
+
       scheduleThunder();
     } else if (thunderTimeoutRef.current) {
       clearTimeout(thunderTimeoutRef.current);
+      thunderTimeoutRef.current = null;
     }
 
     return () => {
       if (thunderTimeoutRef.current) {
         clearTimeout(thunderTimeoutRef.current);
+        thunderTimeoutRef.current = null;
       }
     };
   }, [weather, status]);
-
-  // Helper to map biome name to ambient ID
-  function getAmbientId(biomeName: string): string {
-    switch (biomeName) {
-      case 'Forest Stream': return 'ambient-forest';
-      case 'Mountain Rapids': return 'ambient-mountain';
-      case 'Canyon River': return 'ambient-desert';
-      case 'Crystal Falls': return 'ambient-waterfall';
-      default: return 'ambient-forest';
-    }
-  }
 
   return <></>;
 }

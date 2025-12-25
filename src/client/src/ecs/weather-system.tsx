@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import * as THREE from 'three';
 import { WeatherType } from '../config/biome-config';
 import { useGameStore } from '../hooks/useGameStore';
-import { useBiome } from './biome-system';
+import { useWeather } from '../hooks/useWeather';
 
 interface RainDrop {
   position: THREE.Vector3;
@@ -25,7 +25,7 @@ interface SnowFlake {
  */
 export function WeatherSystem(): React.JSX.Element {
   const { status } = useGameStore();
-  const biome = useBiome();
+  const weather = useWeather();
   const rainDropsRef = useRef<RainDrop[]>([]);
   const snowFlakesRef = useRef<SnowFlake[]>([]);
   const weatherTypeRef = useRef<WeatherType>('clear');
@@ -39,7 +39,7 @@ export function WeatherSystem(): React.JSX.Element {
     }
 
     const time = state.clock.getElapsedTime();
-    const currentWeather = biome.weather;
+    const currentWeather = weather;
     weatherTypeRef.current = currentWeather;
 
     // Rain system
