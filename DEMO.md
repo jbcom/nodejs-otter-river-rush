@@ -20,13 +20,13 @@ Experience the game directly in your browser! Our web build leverages WebAssembl
 ## 📸 Showcase Gallery
 
 ### Gameplay
-![Gameplay Demo](./showcase/gameplay-demo.png)
+![Otter River Rush gameplay showing the otter character navigating obstacles in a 3D river environment](./showcase/gameplay-demo.png)
 *High-performance 3D rendering with real-time physics.*
 
 ### Multi-Device Support
 | Mobile | Tablet | Desktop |
 | :---: | :---: | :---: |
-| ![Mobile Menu](./showcase/main-menu-mobile.png) | ![Tablet Menu](./showcase/main-menu-tablet.png) | ![Desktop Menu](./showcase/main-menu-desktop.png) |
+| ![Otter River Rush main menu on a mobile device](./showcase/main-menu-mobile.png) | ![Otter River Rush main menu on a tablet device](./showcase/main-menu-tablet.png) | ![Otter River Rush main menu on a desktop browser](./showcase/main-menu-desktop.png) |
 | *Mobile-First Design* | *Adaptive Layouts* | *Desktop Experience* |
 
 ---

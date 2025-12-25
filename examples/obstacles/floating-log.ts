@@ -1,3 +1,5 @@
+// NOTE: This is a reference example. In a real project, you would move this to
+// src/client/src/game/data/enemy-definitions.ts or use path aliases.
 import { EnemyDefinition } from '../../src/client/src/game/data/enemy-definitions';
 
 /**

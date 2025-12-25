@@ -212,16 +212,6 @@
 
 ## Session: 2025-12-24
 ### Completed
-- [x] Created root  directory with custom obstacle, achievement, and level examples.
-- [x] Set up  directory with screenshots extracted from E2E test snapshots.
-- [x] Created  to highlight the playable WASM (Rapier) demo and visual showcase.
-- [x] Updated  with links to the new demo and examples.
-- [x] Unified repository URLs and subpaths to  across the codebase and documentation.
-- [x] Fixed GitHub Pages deployment configuration (base URL and PWA manifest).
-
-
-## Session: 2025-12-24
-### Completed
 - [x] Created root `examples/` directory with custom obstacle, achievement, and level examples.
 - [x] Set up `showcase/` directory with screenshots extracted from E2E test snapshots.
 - [x] Created `DEMO.md` to highlight the playable WASM (Rapier) demo and visual showcase.

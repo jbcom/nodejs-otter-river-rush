@@ -1,10 +1,13 @@
+// NOTE: This is a reference example for custom level patterns.
+import { ObstaclePattern } from '../../src/client/src/game/data/level-patterns';
+
 /**
  * Example: Custom Level Pattern
  * 
  * This example shows how to create a custom level segment with a specific
  * sequence of obstacles and enemy spawn rules.
  */
-export const STORMY_PASSAGE = {
+export const STORMY_PASSAGE: ObstaclePattern = {
   id: 'stormy_passage_example',
   name: 'Stormy Passage',
   description: 'A treacherous segment with falling debris and frequent lightning strikes.',
@@ -18,8 +21,7 @@ export const STORMY_PASSAGE = {
     { time: 3000, lane: 1, type: 'log' },
     { time: 4500, lane: 2, type: 'boulder' },
     { time: 6000, lane: 0, type: 'rock' },
-    { time: 6000, lane: 1, type: 'rock' },
-    { time: 6000, lane: 2, type: 'rock' }, // Wall of rocks!
+    { time: 6000, lane: 2, type: 'rock' }, // Leave lane 1 open for passage
     { time: 8000, lane: 1, type: 'branch' },
     { time: 9500, lane: 0, type: 'boulder' },
     { time: 11000, lane: 2, type: 'log' },

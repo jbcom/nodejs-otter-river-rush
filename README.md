@@ -58,7 +58,7 @@
 ```bash
 # Clone repository
 git clone https://github.com/jbcom/nodejs-otter-river-rush.git
-cd otter-river-rush
+cd nodejs-otter-river-rush
 
 # Install dependencies
 pnpm install
@@ -123,7 +123,7 @@ pnpm exec electron-builder --dir
 ## 📁 Project Structure
 
 ```
-otter-river-rush/
+nodejs-otter-river-rush/
 ├── examples/                      # Developer examples and extension guides
 ├── showcase/                      # Visual assets, screenshots, and GIFs
 ├── src/
