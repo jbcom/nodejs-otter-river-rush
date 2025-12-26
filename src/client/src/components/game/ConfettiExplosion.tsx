@@ -105,7 +105,7 @@ export function ConfettiExplosion({
           >
             <planeGeometry args={[particle.size, particle.size * 1.5]} />
             <meshBasicMaterial
-              color={particle.color}
+              color={[particle.color.r, particle.color.g, particle.color.b]}
               transparent
               opacity={alpha}
               side={THREE.DoubleSide}
