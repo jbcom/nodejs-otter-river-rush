@@ -21,18 +21,14 @@ export function MainMenu(): React.JSX.Element {
   return (
     <div
       id="startScreen"
-      className="fixed inset-0 pointer-events-auto z-50"
-      style={{
-        background:
-          'linear-gradient(180deg, rgba(10, 37, 64, 0.85) 0%, rgba(10, 37, 64, 0.92) 100%)',
-      }}
+      className="fixed inset-0 pointer-events-auto z-50 main-menu-gradient"
     >
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md px-4 space-y-4 splash-in overflow-y-auto max-h-[90vh] py-4">
         {/* Hero Section */}
         <div className="text-center py-2">
           <div className="text-5xl mb-2 otter-bounce">🦦</div>
           <h1 className="otter-title text-3xl md:text-4xl mb-2">
-            River Rush
+            Otter River Rush
           </h1>
           <p className="text-sm text-blue-300">Swipe or use arrow keys to dodge!</p>
           {highScore > 0 && (
@@ -56,7 +52,7 @@ export function MainMenu(): React.JSX.Element {
           <button
             id="timeTrialButton"
             onClick={() => handleStartGame('time_trial')}
-            className="otter-btn otter-btn-secondary py-3 text-sm flex-col gap-1"
+            className="otter-btn otter-btn-secondary py-3 text-sm flex flex-col gap-1"
           >
             <span className="text-lg">⏱️</span>
             <span>Time</span>
@@ -65,7 +61,7 @@ export function MainMenu(): React.JSX.Element {
           <button
             id="zenButton"
             onClick={() => handleStartGame('zen')}
-            className="otter-btn otter-btn-secondary py-3 text-sm flex-col gap-1"
+            className="otter-btn otter-btn-secondary py-3 text-sm flex flex-col gap-1"
           >
             <span className="text-lg">🧘</span>
             <span>Zen</span>
@@ -74,7 +70,7 @@ export function MainMenu(): React.JSX.Element {
           <button
             id="dailyButton"
             onClick={() => handleStartGame('daily_challenge')}
-            className="otter-btn otter-btn-secondary py-3 text-sm flex-col gap-1"
+            className="otter-btn otter-btn-secondary py-3 text-sm flex flex-col gap-1"
           >
             <span className="text-lg">🎲</span>
             <span>Daily</span>

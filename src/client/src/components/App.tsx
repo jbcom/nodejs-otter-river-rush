@@ -1,7 +1,13 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useGameStore } from '../hooks/useGameStore';
 import { ErrorBoundary } from './ErrorBoundary';
+import { LoadingScreen } from './ui/LoadingScreen';
 
+// Constants for loading simulation
+const LOAD_INTERVAL_MS = 100;
+const MIN_INCREMENT = 20;
+const MAX_RANDOM_INCREMENT = 10;
+const READY_DELAY_MS = 200;
 // Lazy load game and UI components for better bundle splitting
 const GameCanvas = lazy(() =>
   import('./game/GameCanvas').then((m) => ({ default: m.GameCanvas }))
@@ -16,27 +22,6 @@ const MainMenu = lazy(() =>
   import('./ui/MainMenu').then((m) => ({ default: m.MainMenu }))
 );
 
-// Loading screen component
-function LoadingScreen({ progress }: { progress: number }) {
-  return (
-    <div className="fixed inset-0 flex items-center justify-center bg-slate-900 z-[100]">
-      <div className="text-center space-y-4 px-6">
-        <div className="text-6xl mb-4 otter-bounce">🦦</div>
-        <h1 className="otter-title text-2xl md:text-3xl">Otter River Rush</h1>
-        <div className="w-64 max-w-full h-3 bg-slate-700 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <p className="text-blue-300 text-sm">
-          {progress < 100 ? 'Preparing the river...' : 'Ready to splash!'}
-        </p>
-      </div>
-    </div>
-  );
-}
-
 export function App(): React.JSX.Element {
   const { status } = useGameStore();
   const [isReady, setIsReady] = useState(false);
@@ -45,18 +30,35 @@ export function App(): React.JSX.Element {
   // Simulate initial load progress and mark ready after a brief initialization
   useEffect(() => {
     let progress = 0;
+    let isMounted = true;
+
     const interval = setInterval(() => {
-      progress += Math.random() * 30 + 10;
+      // Use smoother progress increments
+      progress += MIN_INCREMENT + Math.random() * MAX_RANDOM_INCREMENT;
+
       if (progress >= 100) {
         progress = 100;
         clearInterval(interval);
-        // Small delay to ensure everything is mounted
-        setTimeout(() => setIsReady(true), 200);
-      }
-      setLoadProgress(Math.min(progress, 100));
-    }, 100);
 
-    return () => clearInterval(interval);
+        // Small delay to ensure everything is mounted before hiding loading screen
+        if (isMounted) {
+          setTimeout(() => {
+            if (isMounted) {
+              setIsReady(true);
+            }
+          }, READY_DELAY_MS);
+        }
+      }
+
+      if (isMounted) {
+        setLoadProgress(Math.min(progress, 100));
+      }
+    }, LOAD_INTERVAL_MS);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   return (

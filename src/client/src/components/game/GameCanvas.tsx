@@ -44,11 +44,11 @@ export function GameCanvas({
   // Initialize player immediately when game transitions to playing
   useEffect(() => {
     if (status === 'playing' && !playerSpawnedRef.current) {
-      // Clear any stale player entities first
+      // Spawn player if one doesn't exist
       if (queries.player.entities.length === 0) {
         spawn.otter(0);
-        playerSpawnedRef.current = true;
       }
+      playerSpawnedRef.current = true; // Mark as spawned to prevent repeated spawn attempts
     }
 
     // Reset flag when returning to menu
@@ -60,7 +60,6 @@ export function GameCanvas({
   // Responsive canvas sizing - use full viewport
   const canvasStyle: React.CSSProperties = {
     width: '100vw',
-    height: '100vh',
     height: '100dvh', // Dynamic viewport height for mobile browsers
     position: 'fixed',
     top: 0,
