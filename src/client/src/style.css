@@ -543,6 +543,20 @@ a {
   backdrop-filter: blur(8px);
 }
 
+.main-menu-gradient {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 37, 64, 0.85) 0%,
+    rgba(10, 37, 64, 0.92) 100%
+  );
+}
+
+.game-canvas-container {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+}
+
 /* ============================================
    CUSTOM ANIMATIONS
    ============================================ */
