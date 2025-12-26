@@ -10,7 +10,8 @@ export function River() {
 
   return (
     <AdvancedWater
-      ref={meshRef}
+      // biome-ignore lint/suspicious/noExplicitAny: bypass three types version mismatch
+      ref={meshRef as any}
       size={[20, 30]}
       position={[0, 0, -1]}
       color="#1e40af"
