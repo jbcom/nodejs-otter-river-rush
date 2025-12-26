@@ -39,24 +39,36 @@ export function GameCanvas({
   const { status } = useGameStore();
   const constraints = useMobileConstraints();
   const canvasRef = useRef<HTMLDivElement>(null);
+  const playerSpawnedRef = useRef(false);
 
-  // Initialize player when game starts
+  // Initialize player immediately when game transitions to playing
   useEffect(() => {
-    if (status === 'playing') {
+    if (status === 'playing' && !playerSpawnedRef.current) {
+      // Clear any stale player entities first
       if (queries.player.entities.length === 0) {
         spawn.otter(0);
+        playerSpawnedRef.current = true;
       }
+    }
+
+    // Reset flag when returning to menu
+    if (status === 'menu') {
+      playerSpawnedRef.current = false;
     }
   }, [status]);
 
-  // Responsive canvas sizing based on orientation
+  // Responsive canvas sizing - use full viewport
   const canvasStyle: React.CSSProperties = {
     width: '100vw',
-    height: constraints.orientation === 'portrait' ? '80vh' : '100vh',
+    height: '100vh',
+    height: '100dvh', // Dynamic viewport height for mobile browsers
     position: 'fixed',
     top: 0,
     left: 0,
   };
+
+  // Only render game systems when playing
+  const isActive = status === 'playing' || status === 'paused';
 
   return (
     <div
@@ -72,6 +84,7 @@ export function GameCanvas({
           powerPreference: 'high-performance',
         }}
         dpr={constraints.pixelRatio}
+        frameloop={isActive ? 'always' : 'demand'} // Only animate when playing
       >
         <PerspectiveCamera
           makeDefault
@@ -95,6 +108,7 @@ export function GameCanvas({
         />
 
         <Suspense fallback={null}>
+          {/* Environment always renders for visual backdrop */}
           <Skybox />
           <River />
           <LaneMarkers />
@@ -103,25 +117,31 @@ export function GameCanvas({
             args={[VISUAL.fog.color, VISUAL.fog.near, VISUAL.fog.far]}
           />
 
-          <EntityRenderer />
+          {/* Game entities only render when active */}
+          {isActive && <EntityRenderer />}
 
-          <GameSystems />
-          <InputSystem />
-          <TouchInputSystem />
-          <CameraSystem />
-          <ScoreSystem />
-          <PowerUpSystem />
-          <BiomeSystem />
-          <DifficultySystem />
-          <AchievementSystem />
-          <ComboSystem />
-          <MagnetSystem />
-          <NearMissSystem />
-          <ShieldEffectSystem />
-          <WeatherSystem />
-          <QuestSystem />
-          <LeaderboardSystem />
-          <EnemySystem />
+          {/* Systems only run when actively playing */}
+          {isActive && (
+            <>
+              <GameSystems />
+              <InputSystem />
+              <TouchInputSystem />
+              <CameraSystem />
+              <ScoreSystem />
+              <PowerUpSystem />
+              <BiomeSystem />
+              <DifficultySystem />
+              <AchievementSystem />
+              <ComboSystem />
+              <MagnetSystem />
+              <NearMissSystem />
+              <ShieldEffectSystem />
+              <WeatherSystem />
+              <QuestSystem />
+              <LeaderboardSystem />
+              <EnemySystem />
+            </>
+          )}
         </Suspense>
 
         <AudioEnvironment />

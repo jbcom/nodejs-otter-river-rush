@@ -148,27 +148,29 @@ export function useMobileConstraints(): MobileConstraints {
 
   // Handle app lifecycle (pause/resume)
   useEffect(() => {
-    const { pauseGame } = useGameStore.getState();
-
     const handleVisibilityChange = () => {
-      if (document.hidden) {
-        // App backgrounded
+      const { status, pauseGame } = useGameStore.getState();
+      // Only pause if actively playing (not already paused/menu/game_over)
+      if (document.hidden && status === 'playing') {
         pauseGame();
       }
     };
 
-    const handlePause = () => {
-      pauseGame();
+    const handlePageHide = () => {
+      const { status, pauseGame } = useGameStore.getState();
+      if (status === 'playing') {
+        pauseGame();
+      }
     };
 
+    // Only pause on actual page hide/visibility change, not window blur
+    // Window blur happens when clicking outside the window which is annoying on desktop
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('pagehide', handlePause);
-    window.addEventListener('blur', handlePause);
+    window.addEventListener('pagehide', handlePageHide);
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('pagehide', handlePause);
-      window.removeEventListener('blur', handlePause);
+      window.removeEventListener('pagehide', handlePageHide);
     };
   }, []);
 
