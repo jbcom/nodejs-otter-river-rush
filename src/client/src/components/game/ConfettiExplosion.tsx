@@ -96,7 +96,11 @@ export function ConfettiExplosion({
         return (
           <mesh
             key={i}
-            position={particle.position}
+            position={[
+              particle.position.x,
+              particle.position.y,
+              particle.position.z,
+            ]}
             rotation={[0, 0, particle.rotation]}
           >
             <planeGeometry args={[particle.size, particle.size * 1.5]} />
